@@ -1,5 +1,6 @@
 package com.mysite.sbb;
 
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -84,5 +85,17 @@ class SbbApplicationTests {
         Question q = question.get();
         this.questionRepository.delete(q);
         assertEquals(1,this.questionRepository.count());
+    }
+
+    @Transactional
+    @Test
+    void knowDifferentLazyAndEager(){
+        Optional<Question> question = this.questionRepository.findById(8);
+        assertTrue(question.isPresent());
+        Question q = question.get();
+
+        List<Answer> answerList = q.getAnswerList();
+        assertEquals(1, answerList.size());
+        assertEquals("answer Content test", answerList.get(0).getContent());
     }
 }
