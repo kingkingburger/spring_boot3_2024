@@ -12,7 +12,7 @@ public class UserService {
 
     public SiteUser createUser(String name, String email, String password) {
         SiteUser user = new SiteUser();
-        user.setName(name);
+        user.setUsername(name);
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
         this.userRepository.save(user);
