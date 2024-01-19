@@ -29,7 +29,6 @@ public class AnswerTests {
         Question q = question.get();
 
         Answer a = new Answer();
-        a.setSubject("subjectTest");
         a.setContent("answer Content test");
         a.setQuestion(q);
         a.setCreateDate(LocalDateTime.now());
