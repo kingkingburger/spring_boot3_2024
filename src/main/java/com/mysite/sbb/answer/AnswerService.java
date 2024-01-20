@@ -21,7 +21,9 @@ public class AnswerService {
         answer.setQuestion(question);
         answer.setCreateDate(LocalDateTime.now());
         answer.setAuthor(user);
-        this.answerRepository.save(answer);
+        AnswerDto answerDto = AnswerDto.builder().content(content).build();
+//        this.answerRepository.save(answer);
+//        this.answerRepository.save(answerDto);
     }
 
     public void vote(Answer answer, SiteUser siteUser) {

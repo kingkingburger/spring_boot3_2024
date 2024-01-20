@@ -5,6 +5,8 @@ import com.mysite.sbb.user.SiteUser;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,8 +26,11 @@ public class Question {
     @Column(columnDefinition = "TEXT")
     private String content;
 
+    @CreationTimestamp
+    @Column(updatable = false)
     private LocalDateTime createDate;
 
+    @UpdateTimestamp
     private LocalDateTime modifyDate;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)

@@ -27,6 +27,15 @@ public class QuestionService {
 
     private final QuestionRepository questionRepository;
 
+    public void create(String subject, String content, SiteUser user) {
+        Question question = new Question();
+        question.setSubject(subject);
+        question.setContent(content);
+//        question.setCreateDate(LocalDateTime.now());
+        question.setAuthor(user);
+        this.questionRepository.save(question);
+    }
+
     public Page<Question> getList(int page, String bw) {
         List<Sort.Order> sorts = new ArrayList();
         sorts.add(Sort.Order.desc("createDate"));
@@ -43,14 +52,6 @@ public class QuestionService {
         throw new DataNotFoundException("question not found");
     }
 
-    public void create(String subject, String content, SiteUser user) {
-        Question question = new Question();
-        question.setSubject(subject);
-        question.setContent(content);
-        question.setCreateDate(LocalDateTime.now());
-        question.setAuthor(user);
-        this.questionRepository.save(question);
-    }
 
     public void modify(Question question, String subject, String content) {
         question.setSubject(subject);
