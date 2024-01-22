@@ -15,15 +15,14 @@ import java.util.Optional;
 public class AnswerService {
     private final AnswerRepository answerRepository;
 
-    public void create(Question question, String content, SiteUser user){
+    public Answer create(Question question, String content, SiteUser user){
         Answer answer = new Answer();
         answer.setContent(content);
         answer.setQuestion(question);
         answer.setCreateDate(LocalDateTime.now());
         answer.setAuthor(user);
-        AnswerDto answerDto = AnswerDto.builder().content(content).build();
-//        this.answerRepository.save(answer);
-//        this.answerRepository.save(answerDto);
+        this.answerRepository.save(answer);
+        return answer;
     }
 
     public void vote(Answer answer, SiteUser siteUser) {
