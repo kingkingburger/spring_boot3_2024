@@ -1,6 +1,7 @@
-package com.hyundai.poc.scc.domain;
+package com.mysite.sbb.scc.domain;
 
-import com.hyundai.poc.awb.domain.Awb;
+
+import com.mysite.sbb.awb.domain.Awb;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
