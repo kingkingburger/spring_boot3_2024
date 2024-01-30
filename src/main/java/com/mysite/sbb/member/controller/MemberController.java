@@ -1,4 +1,4 @@
-package com.mysite.sbb.common.controller;
+package com.mysite.sbb.member.controller;
 
 import com.mysite.sbb.common.response.ApiResponse;
 import com.mysite.sbb.member.dto.request.MemberRegisterRequest;
