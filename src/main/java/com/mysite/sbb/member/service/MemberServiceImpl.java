@@ -12,14 +12,14 @@ import org.springframework.stereotype.Service;
 @Service
 @Log4j2
 @RequiredArgsConstructor
-@Transactional
+//@Transactional
 public class MemberServiceImpl implements MemberService {
 
 
     private final MemberRepository memberRepository;
 
     @Override
-    @Transactional
+//    @Transactional
     public void registerMember(MemberRegisterRequest request){
         Member newMember = Member.of(request);
 
@@ -27,7 +27,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    @Transactional()
+//    @Transactional()
     public MemberInfoResponse getMemberInfoByEmail(String email){
         if(!memberRepository.existsMemberByEmail(email)){
             throw new RuntimeException("NOT FOUND MEMBER");

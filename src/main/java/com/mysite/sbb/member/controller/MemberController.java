@@ -24,6 +24,7 @@ public class MemberController {
     public ResponseEntity<ApiResponse> registerMember(@RequestBody MemberRegisterRequest request) {
         memberService.registerMember(request);
 
+        log.info("hello {}", request);
         return ResponseEntity.ok().body(
                 ApiResponse.of(
                         HttpStatus.OK,
@@ -43,4 +44,5 @@ public class MemberController {
                         memberInfo)
         );
     }
+
 }
