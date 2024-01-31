@@ -23,7 +23,7 @@ public class BasicController {
     private final BasicService basicService;
 
     @PostMapping("/")
-    public ResponseEntity<ApiResponse> registerBasic(BasicRegisterRequest basicRegisterRequest) {
+    public ResponseEntity<ApiResponse> registerBasic(@RequestBody BasicRegisterRequest basicRegisterRequest) {
         basicService.registerBasic(basicRegisterRequest);
 
         return ResponseEntity.ok().body(
