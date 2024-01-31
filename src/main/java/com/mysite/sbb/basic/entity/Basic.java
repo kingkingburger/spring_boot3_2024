@@ -18,24 +18,20 @@ public class Basic extends BaseTimeEntity {
     @Id
     @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
     @Column(nullable = false, length = 100, unique = true)
-    private String email;
+    private String code;
 
-    @Column(length = 100)
-    private String password;
 
     @Builder
-    public Basic(String email, String password) {
-        this.email = email;
-        this.password = password;
+    public Basic(String code, String password) {
+        this.code = code;
     }
 
-    public static Basic of (BasicRegisterRequest newMemberInfo){
+    public static Basic of(BasicRegisterRequest newBasicInfo) {
         return Basic.builder()
-                .email(newMemberInfo.email())
-                .password(newMemberInfo.password())
+                .code(newBasicInfo.code())
                 .build();
     }
 }

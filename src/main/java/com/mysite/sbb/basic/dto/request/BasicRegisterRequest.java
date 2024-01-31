@@ -1,11 +1,9 @@
 package com.mysite.sbb.basic.dto.request;
 
 public record BasicRegisterRequest(
-        String email,
-        String password
+        String code
 ) {
-
-    private static BasicRegisterRequest of(String email, String password){
-        return new BasicRegisterRequest(email, password);
+    private static BasicRegisterRequest of(String code) {
+        return new BasicRegisterRequest(code);
     }
 }
