@@ -20,7 +20,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
-public class MemberService {
+public class BasicService {
     @InjectMocks
     private MemberServiceImpl memberService;
 
