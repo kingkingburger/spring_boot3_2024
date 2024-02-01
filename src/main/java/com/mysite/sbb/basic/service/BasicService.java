@@ -37,6 +37,7 @@ public class BasicService {
         log.info("테스트 basic 입니다.{} {}", basic.getCode(), request.code());
     }
 
+
     public List<Basic> getAllBasic() {
         return basicRepository.findAll();
     }

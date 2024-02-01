@@ -3,10 +3,7 @@ package com.mysite.sbb.basic.entity;
 import com.mysite.sbb.basic.dto.request.BasicRegisterRequest;
 import com.mysite.sbb.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
 @Getter
@@ -25,7 +22,7 @@ public class Basic extends BaseTimeEntity {
 
 
     @Builder
-    public Basic(String code, String password) {
+    public Basic(String code) {
         this.code = code;
     }
 
