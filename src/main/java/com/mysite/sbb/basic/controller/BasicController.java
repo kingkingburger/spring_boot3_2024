@@ -23,6 +23,7 @@ import java.util.List;
 public class BasicController {
 
     private final BasicService basicService;
+    private static final int DEFAULT_PAGE_SIZE = 24;
 
     @PostMapping("/")
     public ResponseEntity<ApiResponse> registerBasic(@RequestBody BasicRegisterRequest basicRegisterRequest) {
@@ -50,9 +51,9 @@ public class BasicController {
     }
 
     // Code를 이용한 검색
-    @GetMapping("/search")
-    public ResponseEntity<ApiResponse> searchBasic (
-            @RequestParam String code
+    /*@GetMapping("/search")
+    public ResponseEntity<ApiResponse> searchBasic(
+            @RequestParam(name = "code", required = false) String code
     ) {
         Basic basic = basicService.getBasicByCode(code);
 
@@ -63,7 +64,7 @@ public class BasicController {
                         basic
                 )
         );
-    }
+    }*/
 
 //    // 생성 날짜 기반 검색
 //    @GetMapping("/searchByCreationDate")

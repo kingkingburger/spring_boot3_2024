@@ -28,16 +28,16 @@ public class BasicService {
         return basicRepository.findAll();
     }
 
-    public Basic getBasicByCode(String code){
-        return basicRepository.findByCode(code);
-    }
-
-    public List<Basic> getBasicByCreateTime(LocalDateTime startDateTime, LocalDateTime endDateTime){
-        return basicRepository.findByCreatedAtBetween(startDateTime, endDateTime);
-    }
-
-    public List<Basic> getBasicByUpdateTime(LocalDateTime startDateTime, LocalDateTime endDateTime){
-        return basicRepository.findByUpdatedAtBetween(startDateTime, endDateTime);
-    }
+//    public Basic getBasicByCode(String code){
+//        return basicRepository.findByCode(code);
+//    }
+//
+//    public List<Basic> getBasicByCreateTime(LocalDateTime startDateTime, LocalDateTime endDateTime){
+//        return basicRepository.findByCreatedAtBetween(startDateTime, endDateTime);
+//    }
+//
+//    public List<Basic> getBasicByUpdateTime(LocalDateTime startDateTime, LocalDateTime endDateTime){
+//        return basicRepository.findByUpdatedAtBetween(startDateTime, endDateTime);
+//    }
 
 }
