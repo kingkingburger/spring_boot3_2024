@@ -34,4 +34,12 @@ public class Basic extends BaseTimeEntity {
                 .code(newBasicInfo.code())
                 .build();
     }
+
+    public void update(
+            Long basicId,
+            String code
+    ){
+        this.id = basicId;
+        this.code = code;
+    }
 }
