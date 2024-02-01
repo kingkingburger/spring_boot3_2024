@@ -7,10 +7,12 @@ import com.mysite.sbb.common.response.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -46,5 +48,53 @@ public class BasicController {
                 )
         );
     }
+
+    // Code를 이용한 검색
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse> searchBasic (
+            @RequestParam String code
+    ) {
+        Basic basic = basicService.getBasicByCode(code);
+
+        return ResponseEntity.ok().body(
+                ApiResponse.of(
+                        HttpStatus.OK,
+                        "Basic의 데이터 입니다.",
+                        basic
+                )
+        );
+    }
+
+//    // 생성 날짜 기반 검색
+//    @GetMapping("/searchByCreationDate")
+//    public ResponseEntity<ApiResponse> getByCreationDate(
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDateTime,
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDateTime) {
+//        List<Basic> basicList = basicService.getBasicByCreateTime(startDateTime, endDateTime);
+//
+//        return ResponseEntity.ok().body(
+//                ApiResponse.of(
+//                        HttpStatus.OK,
+//                        "Basic의 데이터 입니다.",
+//                        basicList
+//                )
+//        );
+//    }
+//
+//    // 업데이트 날짜 기반 검색
+//    @GetMapping("/searchByUpdateDate")
+//    public ResponseEntity<ApiResponse> getByUpdateDate(
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDateTime,
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDateTime) {
+//        List<Basic> basicList = basicService.getBasicByUpdateTime(startDateTime, endDateTime);
+//
+//        return ResponseEntity.ok().body(
+//                ApiResponse.of(
+//                        HttpStatus.OK,
+//                        "Basic의 데이터 입니다.",
+//                        basicList
+//                )
+//        );
+//    }
 
 }
