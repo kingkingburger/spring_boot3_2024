@@ -66,21 +66,21 @@ public class BasicController {
         );
     }*/
 
-//    // 생성 날짜 기반 검색
-//    @GetMapping("/searchByCreationDate")
-//    public ResponseEntity<ApiResponse> getByCreationDate(
-//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDateTime,
-//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDateTime) {
-//        List<Basic> basicList = basicService.getBasicByCreateTime(startDateTime, endDateTime);
-//
-//        return ResponseEntity.ok().body(
-//                ApiResponse.of(
-//                        HttpStatus.OK,
-//                        "Basic의 데이터 입니다.",
-//                        basicList
-//                )
-//        );
-//    }
+    // 생성 날짜 기반 검색
+    @GetMapping("/searchByCreationDate")
+    public ResponseEntity<ApiResponse> getByCreationDate(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDateTime,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDateTime) {
+        List<Basic> basicList = basicService.getBasicByCreateTime(startDateTime, endDateTime);
+
+        return ResponseEntity.ok().body(
+                ApiResponse.of(
+                        HttpStatus.OK,
+                        "Basic의 데이터 입니다.",
+                        basicList
+                )
+        );
+    }
 //
 //    // 업데이트 날짜 기반 검색
 //    @GetMapping("/searchByUpdateDate")
