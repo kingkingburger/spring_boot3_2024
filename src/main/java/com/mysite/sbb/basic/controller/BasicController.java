@@ -6,9 +6,9 @@ import com.mysite.sbb.basic.service.BasicService;
 import com.mysite.sbb.common.response.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.xml.ws.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.apache.coyote.Response;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -104,13 +104,27 @@ public class BasicController {
     public ResponseEntity<ApiResponse> updateBasic(
             @PathVariable("basicId") Long basicId,
             @RequestBody @Valid BasicRegisterRequest request
-    ){
+    ) {
         System.out.println(request.code());
         basicService.updateBasic(basicId, request);
         return ResponseEntity.ok().body(
                 ApiResponse.of(
                         HttpStatus.OK,
                         "성공적으로 수정하였습니다.",
+                        true
+                )
+        );
+    }
+
+    @DeleteMapping("/{basicId}")
+    public ResponseEntity<ApiResponse> deleteBasic(
+            @PathVariable("basicId") Long basicId
+    ) {
+        basicService.deleteBasic(basicId);
+        return ResponseEntity.ok().body(
+                ApiResponse.of(
+                        HttpStatus.OK,
+                        "성공적으로 삭제되었습니다.",
                         true
                 )
         );

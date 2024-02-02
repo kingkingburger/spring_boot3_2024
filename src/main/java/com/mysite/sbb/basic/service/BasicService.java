@@ -38,6 +38,13 @@ public class BasicService {
     }
 
 
+    public void deleteBasic(Long basicId){
+        Basic basic = getBasicEntity(basicId);
+        log.info("[BasicService] basic을 삭제합니다.");
+        basicRepository.delete(basic);
+    }
+
+
     public List<Basic> getAllBasic() {
         return basicRepository.findAll();
     }
