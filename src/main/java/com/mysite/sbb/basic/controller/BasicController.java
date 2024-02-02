@@ -70,12 +70,12 @@ public class BasicController {
             @RequestParam(name = "sort", defaultValue = "LATEST") SortType sort
     ) {
         if (size == null) size = DEFAULT_PAGE_SIZE;
-//        BasicResponse.BasicSearchResponse response = basicService.searchBoards(cursorId, PageRequest.of(0, size), sort);
+        BasicResponse.BasicSearchResponse response = basicService.searchBasics(cursorId, PageRequest.of(0, size), sort);
         return ResponseEntity.ok().body(
                 ApiResponse.of(
                         HttpStatus.OK,
                         "성공적으로 모든 게시글 정보를 조회하였습니다.",
-//                        response
+                        response
                 )
         );
     }

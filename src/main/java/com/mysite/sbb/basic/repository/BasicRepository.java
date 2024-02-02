@@ -2,6 +2,7 @@ package com.mysite.sbb.basic.repository;
 
 import com.mysite.sbb.basic.entity.Basic;
 import io.swagger.v3.oas.annotations.Hidden;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -23,4 +24,21 @@ public interface BasicRepository extends JpaRepository<Basic, Long> {
 
     // 특정 기간 내에 업데이트된 Basic 엔티티 검색
     List<Basic> findByUpdatedAtBetween(LocalDateTime startDateTime, LocalDateTime endDateTime);
+
+
+    /**
+     * SELECT * FROM Basic
+     * ORDER BY created_at DESC
+     * LIMIT :pageSize OFFSET :pageNumber
+     */
+    List<Basic> findAllByOrderByCreatedAtDesc(Pageable page);
+
+    /**
+     * SELECT * FROM Basic
+     * WHERE basicId < :basicId
+     * ORDER BY created_at DESC
+     * LIMIT :pageSize OFFSET :pageNumber
+     */
+    List<Basic> findByIdLessThanOrderByCreatedAtDesc(Long basicId, Pageable page);
+
 }
