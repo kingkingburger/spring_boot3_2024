@@ -45,6 +45,8 @@ public class BasicService {
     }
 
 
+
+
     public List<Basic> getAllBasic() {
         return basicRepository.findAll();
     }
