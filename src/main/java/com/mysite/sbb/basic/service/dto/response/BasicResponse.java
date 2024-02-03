@@ -1,12 +1,19 @@
 package com.mysite.sbb.basic.service.dto.response;
 
 import com.mysite.sbb.basic.entity.Basic;
+import com.mysite.sbb.common.entity.BaseTimeEntity;
+import com.mysite.sbb.common.entity.BaseTimeResponse;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import lombok.extern.log4j.Log4j2;
 
+import java.sql.Time;
+import java.time.LocalDateTime;
 import java.util.List;
 
+@Log4j2
 @Getter
 public class BasicResponse {
 
@@ -37,20 +44,19 @@ public class BasicResponse {
     }
 
     @Getter
-    public static class BasicGetResponse {
+    @SuperBuilder
+    public static class BasicGetResponse extends BaseTimeResponse {
         private final Long id;
         private final String code;
 
-        @Builder
-        private BasicGetResponse(Long id, String code) {
-            this.id = id;
-            this.code = code;
-        }
-
-        public static BasicGetResponse of(Basic basic){
+        public static BasicGetResponse of(Basic basic) {
+            log.info("basic info: {}", basic.getCreatedAt());
             return BasicGetResponse.builder()
                     .id(basic.getId())
                     .code(basic.getCode())
+                    .createdAt(basic.getCreatedAt())
+                    .updatedAt(basic.getUpdatedAt())
+                    .deletedAt(basic.getDeletedAt())
                     .build();
         }
     }

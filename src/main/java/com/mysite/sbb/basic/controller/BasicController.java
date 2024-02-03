@@ -63,7 +63,7 @@ public class BasicController {
      * @param sort     정렬 방식 - 최신순(latest), 인기순(popular)
      * @return ResponseEntity<Object> 객체
      */
-    @GetMapping
+    @GetMapping("/search")
     public ResponseEntity<ApiResponse<BasicResponse.BasicSearchResponse>> searchBoards(
             @RequestParam(name = "cursorId", required = false) Long cursorId,
             @RequestParam(name = "size", required = false) Integer size,
