@@ -44,6 +44,7 @@ public interface BasicRepository extends JpaRepository<Basic, Long> {
      */
     List<Basic> findByIdLessThanOrderByCreatedAtDesc(Long basicId, Pageable page);
 
+    // 왜 안되는지 확인하기
     // 기본적으로 생성 날짜 내림차순으로 정렬하고, 특정 기간 내 업데이트된 엔티티를 옵셔널하게 조회합니다.
     @Query("SELECT b FROM Basic b WHERE " +
             "( :startDateTime IS NULL OR b.createdAt >= :startDateTime ) AND " +
