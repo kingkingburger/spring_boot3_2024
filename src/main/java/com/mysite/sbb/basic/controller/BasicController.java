@@ -70,7 +70,10 @@ public class BasicController {
             @RequestParam(name = "sort", defaultValue = "LATEST") SortType sort
     ) {
         if (size == null) size = DEFAULT_PAGE_SIZE;
-        BasicResponse.BasicSearchResponse response = basicService.searchBasics(cursorId, PageRequest.of(0, size), sort);
+        BasicResponse.BasicSearchResponse response = basicService.searchBasics(
+                cursorId,
+                PageRequest.of(0, size),
+                sort);
         return ResponseEntity.ok().body(
                 ApiResponse.of(
                         HttpStatus.OK,
@@ -79,23 +82,6 @@ public class BasicController {
                 )
         );
     }
-
-
-    // Code를 이용한 검색
-    /*@GetMapping("/search")
-    public ResponseEntity<ApiResponse> searchBasic(
-            @RequestParam(name = "code", required = false) String code
-    ) {
-        Basic basic = basicService.getBasicByCode(code);
-
-        return ResponseEntity.ok().body(
-                ApiResponse.of(
-                        HttpStatus.OK,
-                        "Basic의 데이터 입니다.",
-                        basic
-                )
-        );
-    }*/
 
     // 생성 날짜 기반 검색
     @GetMapping("/searchByCreationDate")
@@ -112,22 +98,25 @@ public class BasicController {
                 )
         );
     }
-//
-//    // 업데이트 날짜 기반 검색
-//    @GetMapping("/searchByUpdateDate")
-//    public ResponseEntity<ApiResponse> getByUpdateDate(
-//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDateTime,
-//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDateTime) {
-//        List<Basic> basicList = basicService.getBasicByUpdateTime(startDateTime, endDateTime);
-//
-//        return ResponseEntity.ok().body(
-//                ApiResponse.of(
-//                        HttpStatus.OK,
-//                        "Basic의 데이터 입니다.",
-//                        basicList
-//                )
-//        );
-//    }
+
+    // 업데이트 날짜 기반 검색
+    @GetMapping("/searchByUpdateDate")
+    public ResponseEntity<ApiResponse> getByUpdateDate(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDateTime,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDateTime) {
+        List<Basic> basicList = basicService.getBasicByUpdateTime(
+                startDateTime,
+                endDateTime,
+                PageRequest.of(0, 10));
+
+        return ResponseEntity.ok().body(
+                ApiResponse.of(
+                        HttpStatus.OK,
+                        "Basic의 데이터 입니다.",
+                        basicList
+                )
+        );
+    }
 
     @PutMapping("/{basicId}")
     public ResponseEntity<ApiResponse> updateBasic(

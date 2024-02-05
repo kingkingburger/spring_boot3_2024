@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -76,8 +77,15 @@ public class BasicService {
         return basicRepository.findByCreatedAtBetween(startDateTime, endDateTime);
     }
 
-    public List<Basic> getBasicByUpdateTime(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        return basicRepository.findByUpdatedAtBetween(startDateTime, endDateTime);
+    public List<Basic> getBasicByUpdateTime(LocalDateTime startDateTime,
+                                            LocalDateTime endDateTime,
+                                            Pageable page) {
+//        return basicRepository.findByUpdatedAtBetween(startDateTime, endDateTime);
+
+        return basicRepository.findByOptionalUpdatedAtBetween(
+                Optional.ofNullable(startDateTime),
+                Optional.ofNullable(endDateTime),
+                page);
     }
 
     private Basic getBasicEntity(Long basicId) {
