@@ -57,7 +57,6 @@ public class BasicController {
 
     /**
      * 모든 Basic을 조회하는 엔드포인트 입니다.
-     *
      * @param cursorId 다음 페이지의 커서 ID
      * @param size     페이지 크기
      * @param sort     정렬 방식 - 최신순(latest), 인기순(popular)
