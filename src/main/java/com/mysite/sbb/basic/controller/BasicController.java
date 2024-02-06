@@ -101,8 +101,8 @@ public class BasicController {
     // 업데이트 날짜 기반 검색
     @GetMapping("/searchByUpdateDate")
     public ResponseEntity<ApiResponse> getByUpdateDate(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDateTime,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDateTime) {
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDateTime,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDateTime) {
         List<Basic> basicList = basicService.getBasicByUpdateTime(
                 startDateTime,
                 endDateTime,

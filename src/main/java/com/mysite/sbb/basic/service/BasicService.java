@@ -80,11 +80,12 @@ public class BasicService {
     public List<Basic> getBasicByUpdateTime(LocalDateTime startDateTime,
                                             LocalDateTime endDateTime,
                                             Pageable page) {
-//        return basicRepository.findByUpdatedAtBetween(startDateTime, endDateTime);
+        LocalDateTime oneWeekAgo = LocalDateTime.now().minusWeeks(1);
 
-        return basicRepository.findByOptionalUpdatedAtBetween(
-                Optional.ofNullable(startDateTime),
-                Optional.ofNullable(endDateTime));
+        startDateTime = Optional.ofNullable(startDateTime).orElse(oneWeekAgo);
+        endDateTime = Optional.ofNullable(endDateTime).orElse(LocalDateTime.now());
+
+        return basicRepository.findByUpdatedAtBetween(startDateTime, endDateTime);
     }
 
     private Basic getBasicEntity(Long basicId) {
