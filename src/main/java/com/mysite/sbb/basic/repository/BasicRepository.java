@@ -47,12 +47,12 @@ public interface BasicRepository extends JpaRepository<Basic, Long> {
     // 왜 안되는지 확인하기
     // 기본적으로 생성 날짜 내림차순으로 정렬하고, 특정 기간 내 업데이트된 엔티티를 옵셔널하게 조회합니다.
     @Query("SELECT b FROM Basic b WHERE " +
-            "( :startDateTime IS NULL OR b.createdAt >= :startDateTime ) AND " +
-            "( :endDateTime IS NULL OR b.createdAt <= :endDateTime ) " +
+            "( b.createdAt >= :startDateTime ) AND " +
+            "( b.createdAt <= :endDateTime ) " +
             "ORDER BY b.createdAt DESC")
     List<Basic> findByOptionalUpdatedAtBetween(
             @Param("startDateTime") Optional<LocalDateTime> startDateTime,
-            @Param("endDateTime") Optional<LocalDateTime> endDateTime,
-            Pageable pageable);
+            @Param("endDateTime") Optional<LocalDateTime> endDateTime);
+
 
 }

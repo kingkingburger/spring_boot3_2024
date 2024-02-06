@@ -84,8 +84,7 @@ public class BasicService {
 
         return basicRepository.findByOptionalUpdatedAtBetween(
                 Optional.ofNullable(startDateTime),
-                Optional.ofNullable(endDateTime),
-                page);
+                Optional.ofNullable(endDateTime));
     }
 
     private Basic getBasicEntity(Long basicId) {
