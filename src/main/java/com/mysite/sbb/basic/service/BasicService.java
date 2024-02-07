@@ -37,9 +37,7 @@ public class BasicService {
 
     public void updateBasic(Long basicId, BasicRegisterRequest request) {
         Basic basic = getBasicEntity(basicId);
-        log.info("테스트 basic 입니다1.{}", basic.getCode());
-        basic.update(basicId, request.code());
-        log.info("테스트 basic 입니다.{} {}", basic.getCode(), request.code());
+        basic.update(request.code());
     }
 
 

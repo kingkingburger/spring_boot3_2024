@@ -121,7 +121,6 @@ public class BasicController {
             @PathVariable("basicId") Long basicId,
             @RequestBody @Valid BasicRegisterRequest request
     ) {
-        System.out.println(request.code());
         basicService.updateBasic(basicId, request);
         return ResponseEntity.ok().body(
                 ApiResponse.of(

@@ -34,10 +34,8 @@ public class Basic extends BaseTimeEntity {
     }
 
     public void update(
-            Long basicId,
             String code
     ){
-        this.id = basicId;
         this.code = code;
     }
 }
