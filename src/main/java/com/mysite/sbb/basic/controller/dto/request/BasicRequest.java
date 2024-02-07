@@ -1,4 +1,4 @@
-package com.mysite.sbb.basic.controller;
+package com.mysite.sbb.basic.controller.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;

@@ -43,7 +43,7 @@ public class BasicController {
 
     @GetMapping("/")
     public ResponseEntity<ApiResponse> getAllBasic() {
-        List<Basic> basicList = basicService.getAllBasic();
+        List<BasicResponse.BasicGetResponse> basicList = basicService.getAllBasic();
 
         return ResponseEntity.ok().body(
                 ApiResponse.of(

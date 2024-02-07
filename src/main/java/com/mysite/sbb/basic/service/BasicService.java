@@ -32,7 +32,7 @@ public class BasicService {
     public void registerBasic(BasicRegisterRequest basicRegisterRequest) {
         Basic basic = Basic.of(basicRegisterRequest);
         basicRepository.save(basic);
-        log.info("[BasicService] 수정하기");
+        log.info("[BasicService] 입력하기");
     }
 
     public void updateBasic(Long basicId, BasicRegisterRequest request) {
@@ -64,8 +64,12 @@ public class BasicService {
         );
     }
 
-    public List<Basic> getAllBasic() {
-        return basicRepository.findAll();
+    public List<BasicResponse.BasicGetResponse> getAllBasic() {
+        List<Basic> basicList = basicRepository.findAll();
+
+        return BasicResponse.BasicGetResponse.ofList(
+                basicList
+        );
     }
 
     public Basic getBasicByCode(String code) {
