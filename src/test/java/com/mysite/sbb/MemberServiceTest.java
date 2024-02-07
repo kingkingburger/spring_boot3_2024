@@ -20,7 +20,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
-public class BasicService {
+public class MemberServiceTest {
     @InjectMocks
     private MemberServiceImpl memberService;
 
@@ -45,5 +45,6 @@ public class BasicService {
         assertThat(registeredMember.email()).isEqualTo("test@gmail.com");
         assertThat(registeredMember.password()).isEqualTo("testPwd");
     }
+
 
 }

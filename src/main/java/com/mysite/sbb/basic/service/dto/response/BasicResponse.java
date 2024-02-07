@@ -1,16 +1,12 @@
 package com.mysite.sbb.basic.service.dto.response;
 
 import com.mysite.sbb.basic.entity.Basic;
-import com.mysite.sbb.common.entity.BaseTimeEntity;
 import com.mysite.sbb.common.entity.BaseTimeResponse;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.log4j.Log4j2;
 
-import java.sql.Time;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Log4j2

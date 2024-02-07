@@ -1,6 +1,7 @@
 package com.mysite.sbb.basic.entity;
 
-import com.mysite.sbb.basic.dto.request.BasicRegisterRequest;
+
+import com.mysite.sbb.basic.service.dto.request.BasicRegisterRequest;
 import com.mysite.sbb.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;

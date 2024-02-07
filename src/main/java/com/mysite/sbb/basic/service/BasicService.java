@@ -1,10 +1,10 @@
 package com.mysite.sbb.basic.service;
 
-import com.mysite.sbb.basic.dto.request.BasicRegisterRequest;
 import com.mysite.sbb.basic.entity.Basic;
 import com.mysite.sbb.basic.exception.BasicBusinessException;
 import com.mysite.sbb.basic.exception.BasicErrorCode;
 import com.mysite.sbb.basic.repository.BasicRepository;
+import com.mysite.sbb.basic.service.dto.request.BasicRegisterRequest;
 import com.mysite.sbb.basic.service.dto.response.BasicResponse;
 import com.mysite.sbb.common.entity.SortType;
 
@@ -33,7 +33,6 @@ public class BasicService {
         Basic basic = Basic.of(basicRegisterRequest);
         basicRepository.save(basic);
         log.info("[BasicService] 수정하기");
-
     }
 
     public void updateBasic(Long basicId, BasicRegisterRequest request) {
