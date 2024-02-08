@@ -1,6 +1,8 @@
 package com.mysite.sbb.basic.service;
 
 import com.mysite.sbb.basic.entity.Basic;
+import com.mysite.sbb.basic.exception.BasicBusinessException;
+import com.mysite.sbb.basic.exception.BasicErrorCode;
 import com.mysite.sbb.basic.repository.BasicRepository;
 import com.mysite.sbb.basic.service.dto.request.BasicRegisterRequest;
 import com.mysite.sbb.basic.service.dto.response.BasicResponse;
@@ -14,6 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.*;
@@ -69,4 +72,26 @@ public class BasicServiceTest {
         assertThat(basic.getCode()).isEqualTo("testOne");
         assertThat(basic2.getCode()).isEqualTo("testTwo");
     }
+
+    @Test
+    @DisplayName("basic 수정한다.")
+    void updateBasic() {
+        // given
+        Basic testBasic1 = new Basic(1L, "test1");
+        Basic testBasic2 = new Basic(2L, "test2");
+
+        given(basicRepository.save(any())).willReturn(testBasic1);
+        given(basicRepository.findByCode(anyString())).willReturn(testBasic1);
+
+        basicRepository.save(testBasic1);
+        basicRepository.save(testBasic2);
+
+        // when
+        Basic basic1 = basicService.getBasicByCode("test1");
+        basic1.update(testBasic2.getCode());
+
+        // then
+        assertThat(basic1.getCode()).isEqualTo("test2");
+    }
+
 }

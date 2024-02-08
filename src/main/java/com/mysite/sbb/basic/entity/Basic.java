@@ -9,6 +9,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @DynamicUpdate
 @Entity
 public class Basic extends BaseTimeEntity {
