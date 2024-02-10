@@ -12,6 +12,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Arrays;
@@ -21,14 +23,15 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.*;
 
-
+@SpringBootTest
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 public class BasicServiceTest {
-    @InjectMocks
+
+    @Autowired
     private BasicService basicService;
 
-    @Mock
+    @Autowired
     private BasicRepository basicRepository;
 
     @Test
@@ -92,6 +95,22 @@ public class BasicServiceTest {
 
         // then
         assertThat(basic1.getCode()).isEqualTo("test2");
+    }
+
+    @Test
+    @DisplayName("basic 삭제한다.")
+    void deleteBasic() {
+        // given
+        Basic testBasic1 = new Basic(1L, "test1");
+        Basic basic1 = basicRepository.save(testBasic1);
+
+        // when
+        basicService.deleteBasic(basic1.getId());
+
+        // then
+        Basic basic = basicService.getBasicByCode("test1");
+        assertThat(basic).isEqualTo(null);
+
     }
 
 }
