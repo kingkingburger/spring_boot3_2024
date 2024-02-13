@@ -6,6 +6,8 @@ import com.mysite.sbb.basic.exception.BasicErrorCode;
 import com.mysite.sbb.basic.repository.BasicRepository;
 import com.mysite.sbb.basic.service.dto.request.BasicRegisterRequest;
 import com.mysite.sbb.basic.service.dto.response.BasicResponse;
+import com.mysite.sbb.support.IntegrationTestSupport;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,10 +25,10 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.*;
 
-@SpringBootTest
-@ActiveProfiles("test")
-@ExtendWith(MockitoExtension.class)
-public class BasicServiceTest {
+/**
+ * 기본적인 테스트 입니다.
+ */
+public class BasicServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private BasicService basicService;
@@ -34,14 +36,20 @@ public class BasicServiceTest {
     @Autowired
     private BasicRepository basicRepository;
 
-    @Test
+
+    @AfterEach
+    void tearDown() {
+        basicRepository.deleteAllInBatch();
+    }
+
     @DisplayName("한 개의 basic을 입력한다..")
+    @Test
     void registerMember() {
         // given
         BasicRegisterRequest newBasicInfo = new BasicRegisterRequest("test1");
         Basic basic = Basic.of(newBasicInfo);
-        given(basicRepository.findByCode(anyString())).willReturn(basic);
-        given(basicRepository.save(any())).willReturn(basic);
+//        given(basicRepository.findByCode(anyString())).willReturn(basic);
+//        given(basicRepository.save(any())).willReturn(basic);
 
         // when
         basicService.registerBasic(newBasicInfo);
@@ -61,8 +69,8 @@ public class BasicServiceTest {
         Basic basic = Basic.of(newBasicInfo);
         Basic basic2 = Basic.of(newBasicInfo2);
 
-        given(basicRepository.findAll()).willReturn(Arrays.asList(basic, basic2));
-        given(basicRepository.save(any(Basic.class))).willReturn(basic).willReturn(basic2);
+//        given(basicRepository.findAll()).willReturn(Arrays.asList(basic, basic2));
+//        given(basicRepository.save(any(Basic.class))).willReturn(basic).willReturn(basic2);
 
         basicService.registerBasic(newBasicInfo);
         basicService.registerBasic(newBasicInfo2);
@@ -83,8 +91,8 @@ public class BasicServiceTest {
         Basic testBasic1 = new Basic(1L, "test1");
         Basic testBasic2 = new Basic(2L, "test2");
 
-        given(basicRepository.save(any())).willReturn(testBasic1);
-        given(basicRepository.findByCode(anyString())).willReturn(testBasic1);
+//        given(basicRepository.save(any())).willReturn(testBasic1);
+//        given(basicRepository.findByCode(anyString())).willReturn(testBasic1);
 
         basicRepository.save(testBasic1);
         basicRepository.save(testBasic2);
