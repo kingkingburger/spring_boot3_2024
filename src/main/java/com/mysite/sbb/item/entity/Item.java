@@ -12,7 +12,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @AllArgsConstructor
 @DynamicUpdate
 @Entity
-public class Basic extends BaseTimeEntity {
+public class Item extends BaseTimeEntity {
 
     @Id
     @Column(nullable = false)
@@ -24,12 +24,12 @@ public class Basic extends BaseTimeEntity {
 
 
     @Builder
-    public Basic(String code) {
+    public Item(String code) {
         this.code = code;
     }
 
-    public static Basic of(BasicRegisterRequest newBasicInfo) {
-        return Basic.builder()
+    public static Item of(BasicRegisterRequest newBasicInfo) {
+        return Item.builder()
                 .code(newBasicInfo.code())
                 .build();
     }

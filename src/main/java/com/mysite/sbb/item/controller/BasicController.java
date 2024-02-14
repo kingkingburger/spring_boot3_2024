@@ -5,7 +5,7 @@ import com.mysite.sbb.basic.service.dto.request.BasicRegisterRequest;
 import com.mysite.sbb.basic.service.dto.response.BasicResponse;
 import com.mysite.sbb.common.entity.SortType;
 import com.mysite.sbb.common.response.ApiResponse;
-import com.mysite.sbb.item.entity.Basic;
+import com.mysite.sbb.item.entity.Item;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -86,13 +86,13 @@ public class BasicController {
     public ResponseEntity<ApiResponse> getByCreationDate(
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDateTime,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDateTime) {
-        List<Basic> basicList = basicService.getBasicByCreateTime(startDateTime, endDateTime);
+        List<Item> itemList = basicService.getBasicByCreateTime(startDateTime, endDateTime);
 
         return ResponseEntity.ok().body(
                 ApiResponse.of(
                         HttpStatus.OK,
                         "Basic의 데이터 입니다.",
-                        basicList
+                        itemList
                 )
         );
     }
@@ -102,7 +102,7 @@ public class BasicController {
     public ResponseEntity<ApiResponse> getByUpdateDate(
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDateTime,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDateTime) {
-        List<Basic> basicList = basicService.getBasicByUpdateTime(
+        List<Item> itemList = basicService.getBasicByUpdateTime(
                 startDateTime,
                 endDateTime,
                 PageRequest.of(0, 10));
@@ -111,7 +111,7 @@ public class BasicController {
                 ApiResponse.of(
                         HttpStatus.OK,
                         "Basic의 데이터 입니다.",
-                        basicList
+                        itemList
                 )
         );
     }
