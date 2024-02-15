@@ -1,6 +1,7 @@
 package com.mysite.sbb.item.repository;
 
 import com.mysite.sbb.basic.entity.Basic;
+import com.mysite.sbb.item.entity.Item;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,33 +19,7 @@ import java.util.Optional;
  */
 @Hidden
 @Repository
-public interface BasicRepository extends JpaRepository<Basic, Long> {
-    // Code를 기준으로 Basic 엔티티 검색
-    Basic findByCode(String code);
-
-    // 특정 기간 내에 생성된 Basic 엔티티 검색
-    List<Basic> findByCreatedAtBetween(LocalDateTime startDateTime, LocalDateTime endDateTime);
-
-    // 특정 기간 내에 업데이트된 Basic 엔티티 검색
-    List<Basic> findByUpdatedAtBetween(LocalDateTime startDateTime, LocalDateTime endDateTime);
-
-
-    /**
-     * SELECT * FROM Basic
-     * ORDER BY created_at DESC
-     * LIMIT :pageSize OFFSET :pageNumber
-     */
-    List<Basic> findAllByOrderByCreatedAtDesc(Pageable page);
-
-    /**
-     * SELECT * FROM Basic
-     * WHERE basicId < :basicId
-     * ORDER BY created_at DESC
-     * LIMIT :pageSize OFFSET :pageNumber
-     */
-    List<Basic> findByIdLessThanOrderByCreatedAtDesc(Long basicId, Pageable page);
-
-
+public interface ItemRepository extends JpaRepository<Item, Long> {
     /**
      * SELECT b FROM Basic b
      * WHERE ( b.createdAt >= :startDateTime ) AND ( b.createdAt <= :endDateTime )

@@ -22,9 +22,9 @@ import java.util.List;
 @RestController
 @Log4j2
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/basic")
-@Tag(name = "Basic", description = "Awb API")
-public class BasicController {
+@RequestMapping("/api/v1/item")
+@Tag(name = "Item", description = "Item API")
+public class ItemController {
 
     private final BasicService basicService;
     private static final int DEFAULT_PAGE_SIZE = 24;
