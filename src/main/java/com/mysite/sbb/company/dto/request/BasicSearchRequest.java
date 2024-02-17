@@ -1,4 +1,4 @@
-package com.mysite.sbb.basic.dto.request;
+package com.mysite.sbb.company.dto.request;
 
 public record BasicSearchRequest(
         String createdAtFrom,

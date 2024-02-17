@@ -51,7 +51,7 @@ public interface BasicRepository extends JpaRepository<Basic, Long> {
      * ORDER BY b.createdAt DESC
      */
     // 기본적으로 생성 날짜 내림차순으로 정렬하고, 특정 기간 내 업데이트된 엔티티를 옵셔널하게 조회합니다.
-    @Query("SELECT b FROM Item b WHERE " +
+    @Query("SELECT b FROM Company b WHERE " +
             "( b.createdAt >= :startDateTime ) AND " +
             "( b.createdAt <= :endDateTime ) " +
             "ORDER BY b.createdAt DESC")
