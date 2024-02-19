@@ -1,6 +1,7 @@
 package com.mysite.sbb.member.entity;
 
 import com.mysite.sbb.common.entity.BaseTimeEntity;
+import com.mysite.sbb.company.entity.Company;
 import com.mysite.sbb.member.dto.request.MemberRegisterRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -25,6 +26,12 @@ public class Member extends BaseTimeEntity {
 
     @Column(length = 100)
     private String password;
+
+
+
+    @ManyToOne(fetch= FetchType.LAZY)
+    @JoinColumn(name="company_id")
+    private Company company;
 
     @Builder
     public Member(String email, String password) {

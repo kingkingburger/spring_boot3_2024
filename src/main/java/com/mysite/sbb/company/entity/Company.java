@@ -3,9 +3,13 @@ package com.mysite.sbb.company.entity;
 
 import com.mysite.sbb.basic.service.dto.request.BasicRegisterRequest;
 import com.mysite.sbb.common.entity.BaseTimeEntity;
+import com.mysite.sbb.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -22,6 +26,9 @@ public class Company extends BaseTimeEntity {
     @Column(nullable = false, length = 100, unique = true)
     private String code;
 
+
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Member> memberList = new ArrayList<>();
 
     @Builder
     public Company(String code) {
