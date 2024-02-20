@@ -27,10 +27,8 @@ public class Member extends BaseTimeEntity {
     @Column(length = 100)
     private String password;
 
-
-
     @ManyToOne(fetch= FetchType.LAZY)
-    @JoinColumn(name="company_id")
+    @JoinColumn(name="company_id", foreignKey = @ForeignKey(name = "FK_MEMBER_COMPANY"))
     private Company company;
 
     @Builder

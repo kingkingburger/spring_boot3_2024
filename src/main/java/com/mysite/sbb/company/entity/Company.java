@@ -26,11 +26,7 @@ public class Company extends BaseTimeEntity {
     @Column(nullable = false, length = 100, unique = true)
     private String code;
 
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Member> memberList = new ArrayList<>();
-
-
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = false)
     private List<Member> memberList = new ArrayList<>();
 
     @Builder
