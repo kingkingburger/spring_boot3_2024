@@ -5,19 +5,18 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
 
-public class BasicRequest {
+public class CompanyRequest {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class BasicCreateRequest {
+    public static class CompanyCreateRequest {
 
         @NotBlank(message = "code를 입력해주세요")
         private String code;
 
         @Builder
-        private BasicCreateRequest(
+        private CompanyCreateRequest(
                 String code
         ) {
             this.code = code;
@@ -28,12 +27,12 @@ public class BasicRequest {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class BasicUpdateRequest {
+    public static class CompanyUpdateRequest {
         @NotBlank(message = "code를 입력해주세요")
         private String code;
 
         @Builder
-        private BasicUpdateRequest(
+        private CompanyUpdateRequest(
                 String code
         ) {
             this.code = code;

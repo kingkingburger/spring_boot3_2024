@@ -1,8 +1,8 @@
 package com.mysite.sbb.company.entity;
 
 
-import com.mysite.sbb.basic.service.dto.request.BasicRegisterRequest;
 import com.mysite.sbb.common.entity.BaseTimeEntity;
+import com.mysite.sbb.company.service.dto.request.CompanyRegisterRequest;
 import com.mysite.sbb.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
@@ -34,9 +34,9 @@ public class Company extends BaseTimeEntity {
         this.code = code;
     }
 
-    public static Company of(BasicRegisterRequest newBasicInfo) {
+    public static Company of(CompanyRegisterRequest newCompanyInfo) {
         return Company.builder()
-                .code(newBasicInfo.code())
+                .code(newCompanyInfo.code())
                 .build();
     }
 

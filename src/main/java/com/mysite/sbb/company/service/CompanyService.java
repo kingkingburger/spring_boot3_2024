@@ -1,23 +1,13 @@
 package com.mysite.sbb.company.service;
 
-import com.mysite.sbb.basic.entity.Basic;
-import com.mysite.sbb.basic.exception.BasicBusinessException;
-import com.mysite.sbb.basic.exception.BasicErrorCode;
-import com.mysite.sbb.basic.repository.BasicRepository;
-import com.mysite.sbb.basic.service.dto.request.BasicRegisterRequest;
-import com.mysite.sbb.basic.service.dto.response.BasicResponse;
-import com.mysite.sbb.common.entity.SortType;
-
+import com.mysite.sbb.company.service.dto.request.CompanyRegisterRequest;
+import com.mysite.sbb.company.entity.Company;
+import com.mysite.sbb.company.repository.CompanyRepository;
+import com.mysite.sbb.company.service.dto.request.CompanyRegisterRequest;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Log4j2
 @Service
@@ -26,85 +16,85 @@ import java.util.stream.Collectors;
 public class CompanyService {
 
 
-    private final BasicRepository basicRepository;
+    private final CompanyRepository companyRepository;
 
 
-    public void registerBasic(BasicRegisterRequest basicRegisterRequest) {
-        Basic basic = Basic.of(basicRegisterRequest);
-        basicRepository.save(basic);
-        log.info("[BasicService] 입력하기");
+    public void registerCompany(CompanyRegisterRequest companyRegisterRequest) {
+        Company company = Company.of(companyRegisterRequest);
+        companyRepository.save(company);
+        log.info("[CompanyService] 입력하기");
     }
 
-    public void updateBasic(Long basicId, BasicRegisterRequest request) {
-        Basic basic = getBasicEntity(basicId);
-        basic.update(request.code());
-    }
+//    public void updateCompany(Long companyId, CompanyRegisterRequest request) {
+//        Company company = getCompanyEntity(companyId);
+//        company.update(request.code());
+//    }
 
 
-    public void deleteBasic(Long basicId) {
-        Basic basic = getBasicEntity(basicId);
-        log.info("[BasicService] basic을 삭제합니다.");
-        basicRepository.delete(basic);
-    }
+//    public void deleteCompany(Long companyId) {
+//        Company company = getCompanyEntity(companyId);
+//        log.info("[CompanyService] company을 삭제합니다.");
+//        companyRepository.delete(company);
+//    }
 
 
-    @Transactional(readOnly = true)
-    public BasicResponse.BasicSearchResponse searchBasics(Long cursorId, Pageable page, SortType sort) {
-        List<Basic> basics = getBasics(cursorId, page, sort);
-        Long nextCursorId = getNextCursorId(sort, basics);
-        Boolean hasNext = basics.size() >= page.getPageSize();
-        return BasicResponse.BasicSearchResponse.of(
-                basics.stream()
-                        .map(BasicResponse.BasicGetResponse::of)
-                        .collect(Collectors.toList()),
-                hasNext,
-                nextCursorId
-        );
-    }
-
-    public List<BasicResponse.BasicGetResponse> getAllBasic() {
-        List<Basic> basicList = basicRepository.findAll();
-
-        return BasicResponse.BasicGetResponse.ofList(
-                basicList
-        );
-    }
-
-    public Basic getBasicByCode(String code) {
-        return basicRepository.findByCode(code);
-    }
-
-    public List<Basic> getBasicByCreateTime(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        return basicRepository.findByCreatedAtBetween(startDateTime, endDateTime);
-    }
-
-    public List<Basic> getBasicByUpdateTime(LocalDateTime startDateTime,
-                                            LocalDateTime endDateTime,
-                                            Pageable page) {
-        LocalDateTime oneWeekAgo = LocalDateTime.now().minusWeeks(1);
-
-        startDateTime = Optional.ofNullable(startDateTime).orElse(oneWeekAgo);
-        endDateTime = Optional.ofNullable(endDateTime).orElse(LocalDateTime.now());
-
-        return basicRepository.findByUpdatedAtBetween(startDateTime, endDateTime);
-    }
-
-    private Basic getBasicEntity(Long basicId) {
-        return basicRepository.findById(basicId)
-                .orElseThrow(() -> new BasicBusinessException(BasicErrorCode.BASIC_NOT_FOUND));
-    }
-
-    private Long getNextCursorId(SortType sort, List<Basic> basics) {
-        return basics.isEmpty() ?
-                null : basics.get(basics.size() - 1).getId();
-    }
-
-    private List<Basic> getBasics(Long cursorId, Pageable page, SortType sort) {
-        log.info("[BasicServiceImpl] 최신순으로 게시글을 조회합니다.(Reading all basics by latest)");
-        return cursorId == null ?
-                basicRepository.findAllByOrderByCreatedAtDesc(page) :
-                basicRepository.findByIdLessThanOrderByCreatedAtDesc(cursorId, page);
-
-    }
+//    @Transactional(readOnly = true)
+//    public CompanyResponse.CompanySearchResponse searchCompanys(Long cursorId, Pageable page, SortType sort) {
+//        List<Company> companys = getCompanys(cursorId, page, sort);
+//        Long nextCursorId = getNextCursorId(sort, companys);
+//        Boolean hasNext = companys.size() >= page.getPageSize();
+//        return CompanyResponse.CompanySearchResponse.of(
+//                companys.stream()
+//                        .map(CompanyResponse.CompanyGetResponse::of)
+//                        .collect(Collectors.toList()),
+//                hasNext,
+//                nextCursorId
+//        );
+//    }
+//
+//    public List<CompanyResponse.CompanyGetResponse> getAllCompany() {
+//        List<Company> companyList = companyRepository.findAll();
+//
+//        return CompanyResponse.CompanyGetResponse.ofList(
+//                companyList
+//        );
+//    }
+//
+//    public Company getCompanyByCode(String code) {
+//        return companyRepository.findByCode(code);
+//    }
+//
+//    public List<Company> getCompanyByCreateTime(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+//        return companyRepository.findByCreatedAtBetween(startDateTime, endDateTime);
+//    }
+//
+//    public List<Company> getCompanyByUpdateTime(LocalDateTime startDateTime,
+//                                            LocalDateTime endDateTime,
+//                                            Pageable page) {
+//        LocalDateTime oneWeekAgo = LocalDateTime.now().minusWeeks(1);
+//
+//        startDateTime = Optional.ofNullable(startDateTime).orElse(oneWeekAgo);
+//        endDateTime = Optional.ofNullable(endDateTime).orElse(LocalDateTime.now());
+//
+//        return companyRepository.findByUpdatedAtBetween(startDateTime, endDateTime);
+//    }
+//
+//    private Company getCompanyEntity(Long companyId) {
+//        return companyRepository.findById(companyId)
+//                .orElseThrow(() -> new CompanyBusinessException(CompanyErrorCode.BASIC_NOT_FOUND));
+//    }
+//
+//    private Long getNextCursorId(SortType sort, List<Company> companys) {
+//        return companys.isEmpty() ?
+//                null : companys.get(companys.size() - 1).getId();
+//    }
+//
+//    private List<Company> getCompanys(Long cursorId, Pageable page, SortType sort) {
+//        log.info("[CompanyServiceImpl] 최신순으로 게시글을 조회합니다.(Reading all companys by latest)");
+//        return cursorId == null ?
+//                companyRepository.findAllByOrderByCreatedAtDesc(page) :
+//                companyRepository.findByIdLessThanOrderByCreatedAtDesc(cursorId, page);
+//
+//    }
 
 }
