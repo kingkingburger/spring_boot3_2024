@@ -27,6 +27,8 @@ public class Member extends BaseTimeEntity {
     @Column(length = 100)
     private String password;
 
+
+
     @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name="company_id")
     private Company company;

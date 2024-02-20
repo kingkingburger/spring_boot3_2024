@@ -30,6 +30,9 @@ public class Company extends BaseTimeEntity {
     private List<Member> memberList = new ArrayList<>();
 
 
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Member> memberList = new ArrayList<>();
+
     @Builder
     public Company(String code) {
         this.code = code;
