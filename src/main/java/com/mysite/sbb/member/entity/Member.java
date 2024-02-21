@@ -14,6 +14,9 @@ import org.hibernate.annotations.DynamicUpdate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicUpdate
 @Entity
+@Table(name="member", uniqueConstraints = {
+        @UniqueConstraint(name = "UK_MEMBER_EMAIL", columnNames = "email")
+})
 public class Member extends BaseTimeEntity {
 
     @Id
