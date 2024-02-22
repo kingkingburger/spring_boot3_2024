@@ -1,5 +1,7 @@
 package com.mysite.sbb.member.service;
 
+import com.mysite.sbb.company.entity.Company;
+import com.mysite.sbb.company.repository.CompanyRepository;
 import com.mysite.sbb.member.dto.request.MemberRegisterRequest;
 import com.mysite.sbb.member.dto.response.MemberInfoResponse;
 import com.mysite.sbb.member.entity.Member;
@@ -7,7 +9,11 @@ import com.mysite.sbb.member.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
+
+import java.util.Optional;
 
 @Service
 @Log4j2
@@ -17,13 +23,14 @@ public class MemberServiceImpl implements MemberService {
 
 
     private final MemberRepository memberRepository;
+    private final CompanyRepository companyRepository;
 
     @Override
 //    @Transactional
     public void registerMember(MemberRegisterRequest request){
         Member newMember = Member.of(request);
-
-        memberRepository.save(newMember);
+        Member entity = request.toEntity(getCompanyEntity(request.companyId()));
+        memberRepository.save(entity);
     }
 
     @Override
@@ -35,6 +42,12 @@ public class MemberServiceImpl implements MemberService {
 
         Member memberInfo = memberRepository.findMemberByEmail(email);
         return MemberInfoResponse.from(memberInfo);
+    }
+
+    private Company getCompanyEntity(Long companyId){
+        return Optional.ofNullable(companyId)
+                .flatMap(companyRepository::findById)
+                .orElseThrow(() -> new NotFoundException("company를 찾지 못했습니다."));
     }
 
 }
