@@ -44,10 +44,29 @@ public class MemberServiceImpl implements MemberService {
         return MemberInfoResponse.from(memberInfo);
     }
 
+    public void updateMember(Long memberId, MemberRegisterRequest request){
+        Member savedMember = getMemberEntity(memberId);
+        log.info("[MemberService] 멤버를 수정합니다. 게시글 번호: {}", savedMember.getId());
+        savedMember.update(
+                request.companyId(),
+                request.email(),
+                request.password()
+        );
+    }
+
+
     private Company getCompanyEntity(Long companyId){
         return Optional.ofNullable(companyId)
                 .flatMap(companyRepository::findById)
                 .orElseThrow(() -> new NotFoundException("company를 찾지 못했습니다."));
     }
+
+    private Member getMemberEntity(Long memberId){
+        return Optional.ofNullable(memberId)
+                .flatMap(memberRepository::findById)
+                .orElseThrow(() -> new NotFoundException("member를 찾지 못했습니다."));
+    }
+
+
 
 }

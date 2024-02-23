@@ -47,4 +47,14 @@ public class Member extends BaseTimeEntity {
                 .password(newMemberInfo.password())
                 .build();
     }
+
+    public void update(
+            final Long companyId,
+            final String email,
+            final String password
+    ){
+        this.email = email;
+        this.password = password;
+        this.company = company;
+    }
 }
