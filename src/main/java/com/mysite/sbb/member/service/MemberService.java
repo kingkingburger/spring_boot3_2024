@@ -8,4 +8,6 @@ public interface MemberService {
     void registerMember(MemberRegisterRequest request);
 
     MemberInfoResponse getMemberInfoByEmail(String email);
+
+    void updateMember(Long memberId, MemberRegisterRequest request);
 }

@@ -44,6 +44,8 @@ public class MemberServiceImpl implements MemberService {
         return MemberInfoResponse.from(memberInfo);
     }
 
+    @Override
+    @Transactional()
     public void updateMember(Long memberId, MemberRegisterRequest request){
         Member savedMember = getMemberEntity(memberId);
         Company companyEntity = getCompanyEntity(request.companyId());
