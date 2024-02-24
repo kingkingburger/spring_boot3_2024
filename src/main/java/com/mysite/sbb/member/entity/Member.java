@@ -49,7 +49,7 @@ public class Member extends BaseTimeEntity {
     }
 
     public void update(
-            final Long companyId,
+            final Company company,
             final String email,
             final String password
     ){

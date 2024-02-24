@@ -46,9 +46,10 @@ public class MemberServiceImpl implements MemberService {
 
     public void updateMember(Long memberId, MemberRegisterRequest request){
         Member savedMember = getMemberEntity(memberId);
+        Company companyEntity = getCompanyEntity(request.companyId());
         log.info("[MemberService] 멤버를 수정합니다. 게시글 번호: {}", savedMember.getId());
         savedMember.update(
-                request.companyId(),
+                companyEntity,
                 request.email(),
                 request.password()
         );
