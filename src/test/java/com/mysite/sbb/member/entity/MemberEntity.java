@@ -19,7 +19,7 @@ class MemberEntity {
         // when, then
         Assertions.assertThat(member.getEmail()).isEqualTo("test@gmail.com");
         Assertions.assertThat(member.getPassword()).isEqualTo("1234");
-
-
     }
+
+
 }
