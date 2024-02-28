@@ -27,7 +27,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
 //    @Transactional
-    public void registerMember(MemberRegisterRequest request){
+    public void registerMember(MemberRegisterRequest request) {
         Member newMember = Member.of(request);
         Member entity = request.toEntity(getCompanyEntity(request.companyId()));
         memberRepository.save(entity);
@@ -35,8 +35,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
 //    @Transactional()
-    public MemberInfoResponse getMemberInfoByEmail(String email){
-        if(!memberRepository.existsMemberByEmail(email)){
+    public MemberInfoResponse getMemberInfoByEmail(String email) {
+        if (!memberRepository.existsMemberByEmail(email)) {
             throw new RuntimeException("NOT FOUND MEMBER");
         }
 
@@ -46,30 +46,29 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional()
-    public void updateMember(Long memberId, MemberRegisterRequest request){
+    public void updateMember(Long memberId, MemberRegisterRequest request) {
         Member savedMember = getMemberEntity(memberId);
         Company companyEntity = getCompanyEntity(request.companyId());
         log.info("[MemberService] 멤버를 수정합니다. 게시글 번호: {}", savedMember.getId());
         savedMember.update(
-                companyEntity,
                 request.email(),
-                request.password()
+                request.password(),
+                companyEntity
         );
     }
 
 
-    private Company getCompanyEntity(Long companyId){
+    private Company getCompanyEntity(Long companyId) {
         return Optional.ofNullable(companyId)
                 .flatMap(companyRepository::findById)
                 .orElseThrow(() -> new NotFoundException("company를 찾지 못했습니다."));
     }
 
-    private Member getMemberEntity(Long memberId){
+    private Member getMemberEntity(Long memberId) {
         return Optional.ofNullable(memberId)
                 .flatMap(memberRepository::findById)
                 .orElseThrow(() -> new NotFoundException("member를 찾지 못했습니다."));
     }
-
 
 
 }
