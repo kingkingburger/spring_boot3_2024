@@ -20,6 +20,4 @@ import java.util.Optional;
 @Hidden
 @Repository
 public interface CompanyRepository extends JpaRepository<Company, Long> {
-
-
 }
