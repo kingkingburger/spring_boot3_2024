@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -37,4 +39,25 @@ class CompanyRepositoryTest {
         // then
         Assertions.assertThat(result1.getCode()).isEqualTo(company.getCode());
     }
+
+    @Test
+    @DisplayName("회사의 리스트를 반환 하는지 확인")
+    void CompanyList() {
+        // given
+        CompanyRegisterRequest request = new CompanyRegisterRequest("COM001");
+        Company company = Company.builder().code(request.code()).build();
+        Company result1 = companyRepository.save(company);
+
+        CompanyRegisterRequest request2 = new CompanyRegisterRequest("COM002");
+        Company company2 = Company.builder().code(request2.code()).build();
+        Company result2 = companyRepository.save(company2);
+
+        // when
+        List<Company> companyList = companyRepository.findAll();
+        
+        // then
+        Assertions.assertThat(companyList.size()).isEqualTo(2);
+
+    }
+
 }
