@@ -9,13 +9,13 @@ services:
     ports:
       - 5555:5432
     restart: always
-#  postgres_test:
-#    image: 'postgres:latest'
-#    container_name: 'real_test'
-#    environment:
-#      - 'POSTGRES_USER=testuser'
-#      - 'POSTGRES_PASSWORD=testsecret'
-#      - 'POSTGRES_DB=testdatabase'
-#    ports:
-#      - 6666:5432  # 테스트용 DB에 다른 포트 번호를 사용합니다.
-#    restart: always
+  postgres_test:
+    image: 'postgres:latest'
+    container_name: 'real_test'
+    environment:
+      - 'POSTGRES_USER=testuser'
+      - 'POSTGRES_PASSWORD=testsecret'
+      - 'POSTGRES_DB=testdatabase'
+    ports:
+      - 6666:5432  # 테스트용 DB에 다른 포트 번호를 사용합니다.
+    restart: always
