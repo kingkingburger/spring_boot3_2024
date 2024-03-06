@@ -1,8 +1,8 @@
 package com.mysite.sbb.item.entity;
 
 
-import com.mysite.sbb.basic.service.dto.request.BasicRegisterRequest;
 import com.mysite.sbb.common.entity.BaseTimeEntity;
+import com.mysite.sbb.item.dto.request.ItemRegisterRequest;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
@@ -10,7 +10,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import java.math.BigDecimal;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 @DynamicUpdate
 @Entity
@@ -40,13 +40,21 @@ public class Item extends BaseTimeEntity {
     private String description;
 
     @Builder
-    public Item(String code) {
+    public Item(String code, String name, String image, String size, BigDecimal unitPrice, String description) {
         this.code = code;
+        this.name = name;
+        this.image = image;
+        this.size = size;
+        this.unitPrice = unitPrice;
+        this.description = description;
     }
 
-    public static Item of(BasicRegisterRequest newBasicInfo) {
+    public static Item of(ItemRegisterRequest newItemInfo) {
         return Item.builder()
-                .code(newBasicInfo.code())
+                .code(newItemInfo.code())
+                .name(newItemInfo.name())
+                .unitPrice(newItemInfo.unitPrice())
+                .description(newItemInfo.description())
                 .build();
     }
 

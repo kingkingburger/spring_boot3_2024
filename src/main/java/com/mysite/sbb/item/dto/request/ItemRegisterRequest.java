@@ -14,7 +14,6 @@ public record ItemRegisterRequest(
         @Schema(example = "description test")
         String description
 ) {
-
     private static ItemRegisterRequest of(String code,
                                           String name,
                                           BigDecimal unitPrice,

@@ -8,6 +8,9 @@ import com.mysite.sbb.basic.service.dto.request.BasicRegisterRequest;
 import com.mysite.sbb.basic.service.dto.response.BasicResponse;
 import com.mysite.sbb.common.entity.SortType;
 
+import com.mysite.sbb.item.dto.request.ItemRegisterRequest;
+import com.mysite.sbb.item.entity.Item;
+import com.mysite.sbb.item.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Pageable;
@@ -27,12 +30,12 @@ public class ItemService {
 
 
     private final BasicRepository basicRepository;
+    private final ItemRepository itemRepository;
 
-
-    public void registerBasic(BasicRegisterRequest basicRegisterRequest) {
-        Basic basic = Basic.of(basicRegisterRequest);
-        basicRepository.save(basic);
-        log.info("[BasicService] 입력하기");
+    public void registerBasic(ItemRegisterRequest itemRegisterRequest) {
+        Item item = Item.of(itemRegisterRequest);
+        itemRepository.save(item);
+        log.info("[ItemService] 입력하기");
     }
 
     public void updateBasic(Long basicId, BasicRegisterRequest request) {
