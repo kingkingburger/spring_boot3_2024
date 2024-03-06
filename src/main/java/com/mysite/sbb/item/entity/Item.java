@@ -49,14 +49,14 @@ public class Item extends BaseTimeEntity {
     @Builder
     public Item(String code,
                 String name,
-//                String image,
-//                String size,
+                String image,
+                String size,
                 BigDecimal unitPrice,
                 String description) {
         this.code = code;
         this.name = name;
-//        this.image = image;
-//        this.size = size;
+        this.image = image;
+        this.size = size;
         this.unitPrice = unitPrice;
         this.description = description;
     }
