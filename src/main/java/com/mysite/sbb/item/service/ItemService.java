@@ -32,7 +32,7 @@ public class ItemService {
     private final BasicRepository basicRepository;
     private final ItemRepository itemRepository;
 
-    public void registerBasic(ItemRegisterRequest itemRegisterRequest) {
+    public void registerItem(ItemRegisterRequest itemRegisterRequest) {
         Item item = Item.of(itemRegisterRequest);
         itemRepository.save(item);
         log.info("[ItemService] 입력하기");

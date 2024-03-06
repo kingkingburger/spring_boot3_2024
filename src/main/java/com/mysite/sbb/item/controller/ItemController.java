@@ -6,6 +6,8 @@ import com.mysite.sbb.basic.service.dto.request.BasicRegisterRequest;
 import com.mysite.sbb.basic.service.dto.response.BasicResponse;
 import com.mysite.sbb.common.entity.SortType;
 import com.mysite.sbb.common.response.ApiResponse;
+import com.mysite.sbb.item.dto.request.ItemRegisterRequest;
+import com.mysite.sbb.item.service.ItemService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,11 +29,12 @@ import java.util.List;
 public class ItemController {
 
     private final BasicService basicService;
+    private final ItemService itemService;
     private static final int DEFAULT_PAGE_SIZE = 24;
 
     @PostMapping("/")
-    public ResponseEntity<ApiResponse> registerBasic(@RequestBody BasicRegisterRequest basicRegisterRequest) {
-        basicService.registerBasic(basicRegisterRequest);
+    public ResponseEntity<ApiResponse> registerBasic(@RequestBody ItemRegisterRequest itemRegisterRequest) {
+        itemService.registerItem(itemRegisterRequest);
 
         return ResponseEntity.ok().body(
                 ApiResponse.of(
