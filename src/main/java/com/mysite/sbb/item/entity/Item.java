@@ -43,7 +43,7 @@ public class Item extends BaseTimeEntity {
     @Column(name = "unit_price", precision = 19, scale = 2)
     private BigDecimal unitPrice;
 
-    @Lob
+    @Column(name="description", columnDefinition = "TEXT")
     private String description;
 
     @Builder
