@@ -3,6 +3,7 @@ package com.mysite.sbb.item.entity;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.mysite.sbb.common.entity.BaseTimeEntity;
+import com.mysite.sbb.company.entity.Company;
 import com.mysite.sbb.item.dto.request.ItemRegisterRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -45,6 +46,10 @@ public class Item extends BaseTimeEntity {
 
     @Column(name="description", columnDefinition = "TEXT")
     private String description;
+
+    @ManyToOne(fetch= FetchType.LAZY)
+    @JoinColumn(name="company_id", foreignKey = @ForeignKey(name = "FK_MEMBER_COMPANY"))
+    private Company company;
 
     @Builder
     public Item(String code,
