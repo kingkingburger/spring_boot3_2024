@@ -81,12 +81,14 @@ public class Item extends BaseTimeEntity {
                        String image,
                        String size,
                        BigDecimal unitPrice,
-                       String description) {
+                       String description,
+                       Company company) {
         this.code = code;
         this.name = name;
         this.image = image;
         this.size = size;
         this.unitPrice = unitPrice;
         this.description = description;
+        this.company = company;
     }
 }

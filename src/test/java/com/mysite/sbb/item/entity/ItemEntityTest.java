@@ -1,6 +1,8 @@
 package com.mysite.sbb.item.entity;
 
 
+import com.mysite.sbb.company.dto.request.CompanyRegisterRequest;
+import com.mysite.sbb.company.entity.Company;
 import com.mysite.sbb.item.dto.request.ItemRegisterRequest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -35,6 +37,7 @@ class ItemEntityTest {
     @DisplayName("물품를 업데이트 확인하는 테스트")
     void updateItem() {
         ItemRegisterRequest newItemInfo = new ItemRegisterRequest("code001", "name001", new BigDecimal("0.1"), "description test");
+        CompanyRegisterRequest requestCompany = new CompanyRegisterRequest("COM001");
 
         // given
         Item item = Item.builder()
@@ -43,14 +46,23 @@ class ItemEntityTest {
                 .unitPrice(newItemInfo.unitPrice())
                 .description(newItemInfo.description())
                 .build();
+        Company company = Company.builder().code(requestCompany.code()).build();
 
         // when
-        item.update("code002", "name002", "", "", new BigDecimal("0.2"), "description test2");
+        item.update("code002",
+                "name002",
+                "",
+                "",
+                new BigDecimal("0.2"),
+                "description test2",
+                company);
 
         // then
         Assertions.assertThat(item.getCode()).isEqualTo("code002");
         Assertions.assertThat(item.getName()).isEqualTo("name002");
         Assertions.assertThat(item.getDescription()).isEqualTo("description test2");
         Assertions.assertThat(item.getUnitPrice()).isEqualTo(new BigDecimal("0.2")); // 수정됨
+        Assertions.assertThat(item.getCompany()).isEqualTo(company);
+
     }
 }
