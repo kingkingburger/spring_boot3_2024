@@ -1,8 +1,14 @@
 package com.mysite.sbb.company.service;
 
+
+import com.mysite.sbb.company.service.dto.request.CompanyRegisterRequest;
+import com.mysite.sbb.company.entity.Company;
 import com.mysite.sbb.company.repository.CompanyRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -24,5 +30,18 @@ class CompanyServiceTest {
         companyService = new CompanyService(companyRepository);
     }
 
+
+    @Test
+    @DisplayName("회사 생성 성공")
+    void createCompanySuccess(){
+        // given
+        CompanyRegisterRequest request = new CompanyRegisterRequest("COM001");
+        Company company = Company.builder().code(request.code()).build();
+
+        Mockito.when(companyRepository.save(company)).thenReturn(company); // 가짜 객체 응답 정의
+
+        // when
+        companyService.registerCompany(request);
+    }
 
 }
