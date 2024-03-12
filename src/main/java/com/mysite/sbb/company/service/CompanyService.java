@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
 
 @Log4j2
 @Service
@@ -25,10 +26,10 @@ public class CompanyService {
         log.info("[CompanyService] 입력하기");
     }
 
-//    public void updateCompany(Long companyId, CompanyRegisterRequest request) {
-//        Company company = getCompanyEntity(companyId);
-//        company.update(request.code());
-//    }
+    public void updateCompany(Long companyId, CompanyRegisterRequest request) {
+        Company company = getCompanyEntity(companyId);
+        company.update(request.code());
+    }
 
 
 //    public void deleteCompany(Long companyId) {
@@ -79,10 +80,10 @@ public class CompanyService {
 //        return companyRepository.findByUpdatedAtBetween(startDateTime, endDateTime);
 //    }
 //
-//    private Company getCompanyEntity(Long companyId) {
-//        return companyRepository.findById(companyId)
-//                .orElseThrow(() -> new CompanyBusinessException(CompanyErrorCode.BASIC_NOT_FOUND));
-//    }
+    private Company getCompanyEntity(Long companyId) {
+        return companyRepository.findById(companyId)
+                .orElseThrow(() -> new NotFoundException("회사를 찾지 못하였습니다."));
+    }
 //
 //    private Long getNextCursorId(SortType sort, List<Company> companys) {
 //        return companys.isEmpty() ?
