@@ -1,3 +1,5 @@
+// 이 코드 없이 redis set, get 테스트
+
 // package com.mysite.sbb.config.redis;
 //
 // import org.springframework.data.repository.CrudRepository;
