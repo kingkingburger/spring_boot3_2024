@@ -1,4 +1,4 @@
-package com.mysite.sbb.config;
+package com.mysite.sbb.config.redis;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
