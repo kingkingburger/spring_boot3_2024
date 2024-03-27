@@ -102,6 +102,12 @@ public class BasicController {
     return ResponseEntity.ok().body(ApiResponse.of(HttpStatus.OK, "성공적으로 삭제되었습니다.", true));
   }
 
+  /**
+   * redis에 set 하는 엔드포인트 입니다.
+   *
+   * @param basicRegisterRequest
+   * @return ResponseEntity<Object> 객체
+   */
   @PostMapping("/redis")
   public ResponseEntity<ApiResponse> registerRedis(
       @RequestBody BasicRegisterRequest basicRegisterRequest) {
@@ -110,13 +116,21 @@ public class BasicController {
     return ResponseEntity.ok().body(ApiResponse.of(HttpStatus.OK, "성공적으로 입력되었습니다."));
   }
 
+  /**
+   * redis의 값을 get 하는 엔드포인트 입니다.
+   *
+   * @param code
+   * @return ResponseEntity<Object> 객체
+   */
   @GetMapping("/redis")
   public ResponseEntity<ApiResponse> getRedis(@RequestParam(name = "code") String code) {
     String redisResult = this.basicService.getRedis(code);
-    //    if (redisResult == null) {
-    //      return ResponseEntity.status(HttpStatus.NOT_FOUND)
-    //          .body(ApiResponse.of(HttpStatus.NOT_FOUND, "Redis에 해당 코드의 값이 없습니다", null));
-    //    }
     return ResponseEntity.ok().body(ApiResponse.of(HttpStatus.OK, "Redis의 값", redisResult));
+  }
+
+  @DeleteMapping("/redis")
+  public ResponseEntity<ApiResponse> deleteRedis(@RequestParam(name = "code") String code) {
+    this.basicService.deleteRedisByCode(code);
+    return ResponseEntity.ok().body(ApiResponse.of(HttpStatus.OK, "Redis의 값이 삭제되었습니다.", code));
   }
 }

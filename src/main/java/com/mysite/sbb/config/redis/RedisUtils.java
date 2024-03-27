@@ -26,6 +26,9 @@ public class RedisUtils {
   }
 
   public void deleteData(String key) {
+    if (key == null) {
+      throw new NotFoundException("key를 입력하지 않았습니다.");
+    }
     redisTemplate.delete(key);
   }
 }

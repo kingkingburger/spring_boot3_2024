@@ -93,6 +93,11 @@ public class BasicService {
     return data;
   }
 
+  public void deleteRedisByCode(String code) {
+    redisUtils.deleteData(code);
+    log.info("[RedisService] 값 삭제");
+  }
+
   private Basic getBasicEntity(Long basicId) {
     return basicRepository
         .findById(basicId)
