@@ -1,21 +1,21 @@
 package com.mysite.sbb.config.redis;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.TimeUnit;
 
 @Service
+@RequiredArgsConstructor
 public class RedisUtils {
 
   private final RedisTemplate<String, Object> redisTemplate;
 
-  public RedisUtils(RedisTemplate<String, Object> redisTemplate) {
-    this.redisTemplate = redisTemplate;
-  }
-
   public void setData(String key, String value, Long expiredTime) {
-    redisTemplate.opsForValue().set(key, value, expiredTime, TimeUnit.MILLISECONDS);
+    System.out.println("key = " + key);
+    System.out.println("value = " + value);
+    redisTemplate.opsForValue().set(key, value);
   }
 
   public String getData(String key) {

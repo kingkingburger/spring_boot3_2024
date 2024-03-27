@@ -9,12 +9,13 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+//
 @Configuration
 public class RedisConfig {
-  @Value("${spring.redis.host}")
+  @Value("${spring.data.redis.host}")
   private String host;
 
-  @Value("${spring.redis.port}")
+  @Value("${spring.data.redis.port}")
   private int port;
 
   @Bean
@@ -41,3 +42,14 @@ public class RedisConfig {
     return redisTemplate;
   }
 }
+
+// @Configuration
+// public class RedisConfig {
+//
+//  @Bean
+//  public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
+//    RedisTemplate<String, Object> template = new RedisTemplate<>();
+//    template.setConnectionFactory(connectionFactory);
+//    return template;
+//  }
+// }
