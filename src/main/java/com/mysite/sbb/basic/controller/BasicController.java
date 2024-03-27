@@ -109,4 +109,14 @@ public class BasicController {
 
     return ResponseEntity.ok().body(ApiResponse.of(HttpStatus.OK, "성공적으로 입력되었습니다."));
   }
+
+  @GetMapping("/redis")
+  public ResponseEntity<ApiResponse> getRedis(@RequestParam(name = "code") String code) {
+    String redisResult = this.basicService.getRedis(code);
+    //    if (redisResult == null) {
+    //      return ResponseEntity.status(HttpStatus.NOT_FOUND)
+    //          .body(ApiResponse.of(HttpStatus.NOT_FOUND, "Redis에 해당 코드의 값이 없습니다", null));
+    //    }
+    return ResponseEntity.ok().body(ApiResponse.of(HttpStatus.OK, "Redis의 값", redisResult));
+  }
 }

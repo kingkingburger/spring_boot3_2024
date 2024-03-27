@@ -3,8 +3,7 @@ package com.mysite.sbb.config.redis;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-
-import java.util.concurrent.TimeUnit;
+import org.webjars.NotFoundException;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +18,10 @@ public class RedisUtils {
   }
 
   public String getData(String key) {
+    String redisResult = (String) redisTemplate.opsForValue().get(key);
+    if (redisResult == null) {
+      throw new NotFoundException("Redis에서 해당 키에 대한 데이터를 찾을 수 없습니다." + key);
+    }
     return (String) redisTemplate.opsForValue().get(key);
   }
 

@@ -87,6 +87,12 @@ public class BasicService {
     log.info("[RedisService] 입력하기");
   }
 
+  public String getRedis(String code) {
+    String data = redisUtils.getData(code);
+    log.info("[RedisService] 값 가져오기");
+    return data;
+  }
+
   private Basic getBasicEntity(Long basicId) {
     return basicRepository
         .findById(basicId)
