@@ -68,8 +68,8 @@ public class Company extends BaseTimeEntity {
   @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = false)
   private List<Member> memberList = new ArrayList<>();
 
-  @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = false)
-  private List<Item> itemList = new ArrayList<>();
+  //  @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = false)
+  //  private List<Item> itemList = new ArrayList<>();
 
   @Builder
   public Company(String code) {
