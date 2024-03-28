@@ -28,86 +28,77 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ItemService {
 
+  private final BasicRepository basicRepository;
+  private final ItemRepository itemRepository;
 
-    private final BasicRepository basicRepository;
-    private final ItemRepository itemRepository;
+  public void registerItem(ItemRegisterRequest itemRegisterRequest) {
+    Item item = Item.of(itemRegisterRequest);
 
-    public void registerItem(ItemRegisterRequest itemRegisterRequest) {
-        Item item = Item.of(itemRegisterRequest);
-        itemRepository.save(item);
-        log.info("[ItemService] 입력하기");
-    }
+    itemRepository.save(item);
+    log.info("[ItemService] 입력하기");
+  }
 
-    public void updateBasic(Long basicId, BasicRegisterRequest request) {
-        Basic basic = getBasicEntity(basicId);
-        basic.update(request.code());
-    }
+  public void updateBasic(Long basicId, BasicRegisterRequest request) {
+    Basic basic = getBasicEntity(basicId);
+    basic.update(request.code());
+  }
 
+  public void deleteBasic(Long basicId) {
+    Basic basic = getBasicEntity(basicId);
+    log.info("[BasicService] basic을 삭제합니다.");
+    basicRepository.delete(basic);
+  }
 
-    public void deleteBasic(Long basicId) {
-        Basic basic = getBasicEntity(basicId);
-        log.info("[BasicService] basic을 삭제합니다.");
-        basicRepository.delete(basic);
-    }
+  @Transactional(readOnly = true)
+  public BasicResponse.BasicSearchResponse searchBasics(
+      Long cursorId, Pageable page, SortType sort) {
+    List<Basic> basics = getBasics(cursorId, page, sort);
+    Long nextCursorId = getNextCursorId(sort, basics);
+    Boolean hasNext = basics.size() >= page.getPageSize();
+    return BasicResponse.BasicSearchResponse.of(
+        basics.stream().map(BasicResponse.BasicGetResponse::of).collect(Collectors.toList()),
+        hasNext,
+        nextCursorId);
+  }
 
+  public List<BasicResponse.BasicGetResponse> getAllBasic() {
+    List<Basic> basicList = basicRepository.findAll();
 
-    @Transactional(readOnly = true)
-    public BasicResponse.BasicSearchResponse searchBasics(Long cursorId, Pageable page, SortType sort) {
-        List<Basic> basics = getBasics(cursorId, page, sort);
-        Long nextCursorId = getNextCursorId(sort, basics);
-        Boolean hasNext = basics.size() >= page.getPageSize();
-        return BasicResponse.BasicSearchResponse.of(
-                basics.stream()
-                        .map(BasicResponse.BasicGetResponse::of)
-                        .collect(Collectors.toList()),
-                hasNext,
-                nextCursorId
-        );
-    }
+    return BasicResponse.BasicGetResponse.ofList(basicList);
+  }
 
-    public List<BasicResponse.BasicGetResponse> getAllBasic() {
-        List<Basic> basicList = basicRepository.findAll();
+  public Basic getBasicByCode(String code) {
+    return basicRepository.findByCode(code);
+  }
 
-        return BasicResponse.BasicGetResponse.ofList(
-                basicList
-        );
-    }
+  public List<Basic> getBasicByCreateTime(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+    return basicRepository.findByCreatedAtBetween(startDateTime, endDateTime);
+  }
 
-    public Basic getBasicByCode(String code) {
-        return basicRepository.findByCode(code);
-    }
+  public List<Basic> getBasicByUpdateTime(
+      LocalDateTime startDateTime, LocalDateTime endDateTime, Pageable page) {
+    LocalDateTime oneWeekAgo = LocalDateTime.now().minusWeeks(1);
 
-    public List<Basic> getBasicByCreateTime(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        return basicRepository.findByCreatedAtBetween(startDateTime, endDateTime);
-    }
+    startDateTime = Optional.ofNullable(startDateTime).orElse(oneWeekAgo);
+    endDateTime = Optional.ofNullable(endDateTime).orElse(LocalDateTime.now());
 
-    public List<Basic> getBasicByUpdateTime(LocalDateTime startDateTime,
-                                            LocalDateTime endDateTime,
-                                            Pageable page) {
-        LocalDateTime oneWeekAgo = LocalDateTime.now().minusWeeks(1);
+    return basicRepository.findByUpdatedAtBetween(startDateTime, endDateTime);
+  }
 
-        startDateTime = Optional.ofNullable(startDateTime).orElse(oneWeekAgo);
-        endDateTime = Optional.ofNullable(endDateTime).orElse(LocalDateTime.now());
+  private Basic getBasicEntity(Long basicId) {
+    return basicRepository
+        .findById(basicId)
+        .orElseThrow(() -> new BasicBusinessException(BasicErrorCode.BASIC_NOT_FOUND));
+  }
 
-        return basicRepository.findByUpdatedAtBetween(startDateTime, endDateTime);
-    }
+  private Long getNextCursorId(SortType sort, List<Basic> basics) {
+    return basics.isEmpty() ? null : basics.get(basics.size() - 1).getId();
+  }
 
-    private Basic getBasicEntity(Long basicId) {
-        return basicRepository.findById(basicId)
-                .orElseThrow(() -> new BasicBusinessException(BasicErrorCode.BASIC_NOT_FOUND));
-    }
-
-    private Long getNextCursorId(SortType sort, List<Basic> basics) {
-        return basics.isEmpty() ?
-                null : basics.get(basics.size() - 1).getId();
-    }
-
-    private List<Basic> getBasics(Long cursorId, Pageable page, SortType sort) {
-        log.info("[BasicServiceImpl] 최신순으로 게시글을 조회합니다.(Reading all basics by latest)");
-        return cursorId == null ?
-                basicRepository.findAllByOrderByCreatedAtDesc(page) :
-                basicRepository.findByIdLessThanOrderByCreatedAtDesc(cursorId, page);
-
-    }
-
+  private List<Basic> getBasics(Long cursorId, Pageable page, SortType sort) {
+    log.info("[BasicServiceImpl] 최신순으로 게시글을 조회합니다.(Reading all basics by latest)");
+    return cursorId == null
+        ? basicRepository.findAllByOrderByCreatedAtDesc(page)
+        : basicRepository.findByIdLessThanOrderByCreatedAtDesc(cursorId, page);
+  }
 }
