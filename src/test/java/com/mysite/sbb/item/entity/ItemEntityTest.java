@@ -1,13 +1,9 @@
 package com.mysite.sbb.item.entity;
 
-import static java.lang.StringTemplate.STR;
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.mysite.sbb.company.dto.request.CompanyRegisterRequest;
 import com.mysite.sbb.company.entity.Company;
 import com.mysite.sbb.item.dto.request.ItemRegisterRequest;
 import java.time.LocalDateTime;
-import java.util.Date;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -47,7 +43,7 @@ class ItemEntityTest {
             now,
             "www",
             now,
-            STR."aaa",
+            "aaa",
             "창고",
             57);
 
