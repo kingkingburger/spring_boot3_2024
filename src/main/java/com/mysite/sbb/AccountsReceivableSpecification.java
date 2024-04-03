@@ -21,7 +21,7 @@ public class AccountsReceivableSpecification {
   @MapsId
   @OneToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "vendor_code", nullable = false)
-  private VendorRegistration vendorRegistration;
+  private Vendor vendorRegistration;
 
   @Size(max = 255)
   @Column(name = "vendor_name")

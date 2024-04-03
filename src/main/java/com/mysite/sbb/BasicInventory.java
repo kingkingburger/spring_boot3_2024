@@ -9,8 +9,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "basic_inventory_registration")
-public class BasicInventoryRegistration {
+@Table(name = "basic_inventory")
+public class BasicInventory {
   @Id
   @Size(max = 255)
   @Column(name = "item_code", nullable = false)
@@ -19,7 +19,7 @@ public class BasicInventoryRegistration {
   @MapsId
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "item_code", nullable = false)
-  private ItemRegistration itemRegistration;
+  private ItemBasic ItemBasic;
 
   @Size(max = 255)
   @Column(name = "item_type")

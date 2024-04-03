@@ -14,8 +14,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "item_registration")
-public class ItemRegistration {
+@Table(name = "item_basic")
+public class ItemBasic {
   @Id
   @Size(max = 255)
   @Column(name = "item_code", nullable = false)

@@ -19,7 +19,7 @@ public class PurchaseSalesStatement {
   @MapsId
   @OneToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "item_code", nullable = false)
-  private ItemRegistration itemRegistration;
+  private ItemBasic ItemBasic;
 
   @Size(max = 255)
   @Column(name = "item_name")

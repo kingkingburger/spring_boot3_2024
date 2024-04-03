@@ -10,14 +10,14 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "transaction_slip_registration")
-public class TransactionSlipRegistration {
+@Table(name = "transaction_slip")
+public class TransactionSlip {
   @EmbeddedId private TransactionSlipRegistrationId id;
 
   @MapsId("itemCode")
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "item_code", nullable = false)
-  private ItemRegistration itemCode;
+  private ItemBasic itemCode;
 
   @Size(max = 255)
   @Column(name = "transaction_type")

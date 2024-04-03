@@ -16,7 +16,7 @@ public class TransactionHistoryInquiry {
   @MapsId("vendorCode")
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "vendor_code", nullable = false)
-  private VendorRegistration vendorCode;
+  private Vendor vendorCode;
 
   @Size(max = 255)
   @Column(name = "vendor_name")
