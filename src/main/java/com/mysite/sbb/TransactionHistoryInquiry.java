@@ -11,12 +11,11 @@ import lombok.Setter;
 @Entity
 @Table(name = "transaction_history_inquiry")
 public class TransactionHistoryInquiry {
-  @EmbeddedId private TransactionHistoryInquiryId id;
+  @Id @GeneratedValue private Integer id;
 
-  @MapsId("vendorCode")
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(name = "vendor_code", nullable = false)
-  private Vendor vendorCode;
+  @JoinColumn(name = "vendor", nullable = false)
+  private Vendor vendor;
 
   @Size(max = 255)
   @Column(name = "vendor_name")

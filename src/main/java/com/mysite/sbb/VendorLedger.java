@@ -1,9 +1,6 @@
 package com.mysite.sbb;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import lombok.Getter;
@@ -14,7 +11,11 @@ import lombok.Setter;
 @Entity
 @Table(name = "vendor_ledger")
 public class VendorLedger {
-  @EmbeddedId private VendorLedgerId id;
+  @Id @GeneratedValue private Integer id;
+
+  @OneToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = "item_code", nullable = false)
+  private ItemBasic ItemBasic;
 
   @Size(max = 255)
   @Column(name = "category")

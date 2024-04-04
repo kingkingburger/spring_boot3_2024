@@ -12,15 +12,15 @@ import lombok.Setter;
 @Entity
 @Table(name = "final_transaction_price")
 public class FinalTransactionPrice {
-  @Id
-  @Size(max = 50)
-  @Column(name = "item_code", nullable = false, length = 50)
-  private String itemCode;
+  @Id @GeneratedValue private Integer id;
 
-  @MapsId
   @OneToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "item_code", nullable = false)
   private ItemBasic ItemBasic;
+
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = "vendor_code", nullable = false)
+  private Vendor vendor;
 
   @Size(max = 255)
   @Column(name = "item_name")

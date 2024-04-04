@@ -13,15 +13,11 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "accounts_receivable_specification")
 public class AccountsReceivableSpecification {
-  @Id
-  @Size(max = 50)
-  @Column(name = "vendor_code", nullable = false, length = 50)
-  private String vendorCode;
+  @Id @GeneratedValue private Integer id;
 
-  @MapsId
-  @OneToOne(fetch = FetchType.LAZY, optional = false)
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "vendor_code", nullable = false)
-  private Vendor vendorRegistration;
+  private Vendor vendor;
 
   @Size(max = 255)
   @Column(name = "vendor_name")

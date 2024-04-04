@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "company")
 public class Company {
+  @Id @GeneratedValue private Integer id;
 
-  @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "code_number", nullable = false)
   private Long codeNumber;

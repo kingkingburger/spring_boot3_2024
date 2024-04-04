@@ -12,11 +12,11 @@ import org.hibernate.annotations.ColumnDefault;
 @Entity
 @Table(name = "quotation_transaction_price")
 public class QuotationTransactionPrice {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @ColumnDefault("nextval('quotation_transaction_price_id_seq'")
-  @Column(name = "id", nullable = false)
-  private Integer id;
+  @Id @GeneratedValue private Integer id;
+
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = "vendor_code", nullable = false)
+  private Vendor vendor;
 
   @Size(max = 255)
   @Column(name = "item_name")

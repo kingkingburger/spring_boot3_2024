@@ -1,9 +1,6 @@
 package com.mysite.sbb;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -16,7 +13,11 @@ import lombok.Setter;
 @Entity
 @Table(name = "transaction_data_modification")
 public class TransactionDataModification {
-  @EmbeddedId private TransactionDataModificationId id;
+  @Id @GeneratedValue private Integer id;
+
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = "vendor_code", nullable = false)
+  private Vendor vendor;
 
   @Column(name = "transaction_date")
   private LocalDate transactionDate;

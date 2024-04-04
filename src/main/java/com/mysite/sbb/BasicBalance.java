@@ -11,12 +11,8 @@ import lombok.Setter;
 @Entity
 @Table(name = "basic_balance")
 public class BasicBalance {
-  @Id
-  @Size(max = 255)
-  @Column(name = "vendor_code", nullable = false)
-  private String vendorCode;
+  @Id @GeneratedValue private Integer id;
 
-  @MapsId
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "vendor_code", nullable = false)
   private Vendor vendor;

@@ -1,9 +1,6 @@
 package com.mysite.sbb;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import lombok.Getter;
@@ -14,10 +11,11 @@ import lombok.Setter;
 @Entity
 @Table(name = "daily_statement_inquiry")
 public class DailyStatementInquiry {
-  @Id
-  @Size(max = 255)
-  @Column(name = "vendor_name", nullable = false)
-  private String vendorName;
+  @Id @GeneratedValue private Integer id;
+
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = "vendor_code", nullable = false)
+  private Vendor vendor;
 
   @Column(name = "remark", length = Integer.MAX_VALUE)
   private String remark;

@@ -1,9 +1,7 @@
 package com.mysite.sbb;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +11,11 @@ import lombok.Setter;
 @Entity
 @Table(name = "salesperson_sales_history")
 public class SalespersonSalesHistory {
-  @EmbeddedId private SalespersonSalesHistoryId id;
+  @Id @GeneratedValue private Integer id;
+
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = "vendor", nullable = false)
+  private Vendor vendor;
 
   @Column(name = "sales_amount")
   private BigDecimal salesAmount;

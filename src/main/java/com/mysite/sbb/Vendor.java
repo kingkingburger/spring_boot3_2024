@@ -1,13 +1,13 @@
 package com.mysite.sbb;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,10 +16,35 @@ import lombok.Setter;
 @Entity
 @Table(name = "vendor")
 public class Vendor {
-  @Id
-  @Size(max = 255)
-  @Column(name = "code", nullable = false)
-  private String code;
+  @Id @GeneratedValue private Integer id;
+
+  @OneToMany(mappedBy = "vendor", cascade = CascadeType.ALL, orphanRemoval = false)
+  private List<BasicBalance> basicBalanceList = new ArrayList<>();
+
+  @OneToMany(mappedBy = "vendor", cascade = CascadeType.ALL, orphanRemoval = false)
+  private List<TransactionSlip> transactionSlipList = new ArrayList<>();
+
+  @OneToMany(mappedBy = "vendor", cascade = CascadeType.ALL, orphanRemoval = false)
+  private List<TransactionDataModification> transactionDataModificationList = new ArrayList<>();
+
+  @OneToMany(mappedBy = "vendor", cascade = CascadeType.ALL, orphanRemoval = false)
+  private List<QuotationTransactionPrice> quotationTransactionPriceList = new ArrayList<>();
+
+  @OneToMany(mappedBy = "vendor", cascade = CascadeType.ALL, orphanRemoval = false)
+  private List<FinalTransactionPrice> finalTransactionPriceList = new ArrayList<>();
+
+  @OneToMany(mappedBy = "vendor", cascade = CascadeType.ALL, orphanRemoval = false)
+  private List<TransactionHistoryInquiry> transactionHistoryInquiryList = new ArrayList<>();
+
+  @OneToMany(mappedBy = "vendor", cascade = CascadeType.ALL, orphanRemoval = false)
+  private List<SalespersonSalesHistory> salespersonSalesHistories = new ArrayList<>();
+
+  @OneToMany(mappedBy = "vendor", cascade = CascadeType.ALL, orphanRemoval = false)
+  private List<AccountsReceivableSpecification> accountsReceivableSpecificationList =
+      new ArrayList<>();
+
+  @OneToMany(mappedBy = "vendor", cascade = CascadeType.ALL, orphanRemoval = false)
+  private List<DailyStatementInquiry> dailyStatementInquiryList = new ArrayList<>();
 
   @Column(name = "is_inactive")
   private Boolean isInactive;

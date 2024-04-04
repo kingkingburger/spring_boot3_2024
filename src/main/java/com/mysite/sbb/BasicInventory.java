@@ -3,6 +3,9 @@ package com.mysite.sbb;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,15 +14,18 @@ import lombok.Setter;
 @Entity
 @Table(name = "basic_inventory")
 public class BasicInventory {
-  @Id
-  @Size(max = 255)
-  @Column(name = "item_code", nullable = false)
-  private String itemCode;
+  @Id @GeneratedValue private Integer id;
 
-  @MapsId
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "item_code", nullable = false)
   private ItemBasic ItemBasic;
+
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = "vendor_code", nullable = false)
+  private Vendor vendor;
+
+  //  @OneToMany(mappedBy = "vendor", cascade = CascadeType.ALL, orphanRemoval = false)
+  //  private List<BasicBalance> basicBalanceList = new ArrayList<>();
 
   @Size(max = 255)
   @Column(name = "item_type")
