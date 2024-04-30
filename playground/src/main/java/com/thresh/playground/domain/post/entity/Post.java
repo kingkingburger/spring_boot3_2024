@@ -1,4 +1,4 @@
-package com.thresh.playground.domain.post;
+package com.thresh.playground.domain.post.entity;
 
 import com.thresh.playground.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
