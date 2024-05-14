@@ -3,12 +3,13 @@ package com.thresh.playground.domain.post.entity;
 import com.thresh.playground.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 
+import java.util.UUID;
+
 @Entity
 public class Post extends BaseTimeEntity {
   @Id
-  @Column(name = "id")
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  @Column(name = "id", updatable = false, nullable = false)
+  private UUID id;
 
   @Column(nullable = false)
   private String title;
@@ -17,5 +18,10 @@ public class Post extends BaseTimeEntity {
   @Lob
   private String content;
 
-  @Column private Long numOfLove = 0L;
+  @PrePersist
+  public void prePersist() {
+    if (this.id == null) {
+      this.id = UUID.randomUUID();
+    }
+  }
 }
