@@ -2,6 +2,7 @@ package com.thresh.playground.domain.user.entity;
 
 import com.thresh.playground.domain.user.entity.constant.RoleType;
 import com.thresh.playground.domain.user.entity.constant.UserStatus;
+import com.thresh.playground.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,7 +11,7 @@ import lombok.*;
 @Table(name = "USERS")
 @Getter
 @Entity
-public class User extends AuditingFields {
+public class User extends BaseTimeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
