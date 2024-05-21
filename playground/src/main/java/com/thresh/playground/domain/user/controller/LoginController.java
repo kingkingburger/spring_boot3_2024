@@ -1,12 +1,10 @@
 package com.thresh.playground.domain.user.controller;
 
-import com.thresh.playground.domain.user.dto.UserLoginRequest;
 import com.thresh.playground.domain.user.dto.UserSignupRequest;
 import com.thresh.playground.domain.user.service.UserManageService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,11 +33,11 @@ public class LoginController {
   //    return "login";
   //  }
   //
-  //  /** [Action] 로그인 프로세스를 동작시킨다. */
-  //  @PostMapping("/user/login")
-  //  public ResponseEntity<?> authenticateUser() {
-  //    return ResponseEntity.ok().build();
-  //  }
+  /** [Action] 로그인 프로세스를 동작시킨다. */
+  @PostMapping("/login")
+  public ResponseEntity<?> authenticateUser() {
+    return ResponseEntity.ok().build();
+  }
   //
   //  /** [Action] 로그아웃 프로세스를 동작시킨다. */
   //  @GetMapping("/user/logout")

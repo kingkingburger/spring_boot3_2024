@@ -2,6 +2,8 @@ package com.thresh.playground.domain.user.service;
 
 import com.thresh.playground.domain.user.dto.UserSignupRequest;
 import com.thresh.playground.domain.user.entity.User;
+import com.thresh.playground.domain.user.entity.constant.RoleType;
+import com.thresh.playground.domain.user.entity.constant.UserStatus;
 import com.thresh.playground.domain.user.repository.UserRepository;
 import com.thresh.playground.global.exception.ErrorCode;
 import com.thresh.playground.global.exception.ProfileApplicationException;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 public class UserManageService {
 
   private final UserRepository userRepository;
+
   private final PasswordEncoder passwordEncoder;
 
   @Transactional
@@ -29,6 +32,8 @@ public class UserManageService {
             .username(request.username())
             .password(passwordEncoder.encode(request.password()))
             .email(request.email())
+            .roleType(RoleType.USER)
+            .userStatus(UserStatus.D)
             .build();
     userRepository.save(users);
   }

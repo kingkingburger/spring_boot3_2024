@@ -26,6 +26,7 @@ public class TokenUtils {
   private static final String JWT_TYPE = "JWT";
   private static final String ALGORITHM = "HS256";
   private static final String LOGIN_ID = "loginId";
+  private static final String EMAIL = "email";
   private static final String USERNAME = "username";
 
   /** 사용자 pk를 기준으로 JWT 토큰을 발급하여 반환해 준다. */
@@ -35,7 +36,7 @@ public class TokenUtils {
         Jwts.builder()
             .setHeader(createHeader()) // Header 구성
             .setClaims(createClaims(userDto)) // Payload - Claims구성
-            .setSubject(String.valueOf(userDto.loginId())) // Payload - Subjects구성
+            .setSubject(String.valueOf(userDto.email())) // Payload - Subjects구성
             .setIssuer("profile") // Issuer 구성
             .signWith(
                 key,
@@ -101,10 +102,10 @@ public class TokenUtils {
     // 공개 클래임에 사용자의 이름과 이메일을 설정해서 정보를 조회할 수 있다.
     Map<String, Object> claims = new HashMap<>();
 
-    log.info("loginId : " + userDto.loginId());
+    log.info("loginId : " + userDto.email());
     log.info("username : " + userDto.username());
 
-    claims.put(LOGIN_ID, userDto.loginId());
+    claims.put(EMAIL, userDto.email());
     claims.put(USERNAME, userDto.username());
     return claims;
   }

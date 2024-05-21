@@ -32,7 +32,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     // 1. userRepository로부터 loginId로 유저정보를 받아온다.
     User byLoginId =
         userRepository
-            .findUserByLoginId(loginId)
+            .findByUsername(loginId)
             .orElseThrow(() -> new ProfileApplicationException(ErrorCode.USER_NOT_FOUND));
 
     // 2.user를 dto로 변환시켜준다.

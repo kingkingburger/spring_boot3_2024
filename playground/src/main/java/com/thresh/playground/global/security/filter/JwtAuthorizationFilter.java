@@ -10,31 +10,31 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
 // 권한이나 인증이 필요한 주소를 타게 될 때
 @Slf4j
-public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
-
-  private final UserRepository userRepository;
-
-  public JwtAuthorizationFilter(
-      AuthenticationManager authenticationManager, UserRepository userRepository) {
-    super(authenticationManager);
-    this.userRepository = userRepository;
-  }
+@RequiredArgsConstructor
+// public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
+public class JwtAuthorizationFilter extends OncePerRequestFilter {
+  private final UserDetailsService userDetailsService;
 
   @Override
   protected void doFilterInternal(
-      HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-      throws IOException, ServletException {
+      HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain chain)
+      throws ServletException, IOException {
     log.info("JwtAuthorizationFilter 인가 : 진입");
 
     // JWT 토큰이 헤더가 존재한다면, if문 안으로 들어가서 토큰 검증을 시작한다.
@@ -55,16 +55,20 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
               .asString();
 
       if (username != null) {
-        User user = userRepository.findByUsername(username).orElseThrow();
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
         // 인증은 토큰 검증시 끝. 인증을 하기 위해서가 아닌 스프링 시큐리티가 수행해주는 권한 처리를 위해
         // 아래와 같이 토큰을 만들어서 Authentication 객체를 강제로 만들고 그걸 세션에 저장하기!!
-        PrincipalDetails principalDetails = new PrincipalDetails(user);
-        Authentication authentication =
+        //        PrincipalDetails principalDetails = new PrincipalDetails(userDetails);
+        //        Authentication authentication =
+        //            new UsernamePasswordAuthenticationToken(
+        //                principalDetails, // 나중에 컨트롤러에서 DI해서 쓸 때 사용하기 편함.
+        //                null, // 패스워드는 모르니까 null 처리
+        //                principalDetails.getAuthorities());
+
+        UsernamePasswordAuthenticationToken authentication =
             new UsernamePasswordAuthenticationToken(
-                principalDetails, // 나중에 컨트롤러에서 DI해서 쓸 때 사용하기 편함.
-                null, // 패스워드는 모르니까 null 처리
-                principalDetails.getAuthorities());
+                userDetails, null, userDetails.getAuthorities());
 
         // 강제로 시큐리티의 세션에 접근하여 값 저장
         // 서명을 통해서 ahthentication을 객체를 만들어준다.

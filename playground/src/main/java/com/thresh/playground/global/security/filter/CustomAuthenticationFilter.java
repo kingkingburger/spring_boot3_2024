@@ -25,11 +25,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  * <p>설명: 이 필터는 "/user/login" 엔드포인트로 들어오는 요청을 처리한다. 클라이언트에서 ajax로 "/user/login" 엔드포인트로 요청을 보낼 때 이
  * 필터에서 요청을 처리하고, 인증이 성공하면 CustomAuthSuccessHandler에서 응답을 반환한다.
  */
-@RequiredArgsConstructor
 @Slf4j
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-  private final AuthenticationManager authenticationManager;
+  public CustomAuthenticationFilter(AuthenticationManager authenticationManager) {
+    super(authenticationManager);
+  }
 
   /**
    * 이 메서드는 사용자가 로그인을 시도할 때 호출된다. HTTP 요청에서 사용자 이름과 비밀번호를 추출하여 UsernamePasswordAuthenticationToken
@@ -41,44 +42,17 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
       HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
     log.info("JwtAutehnticationFilter 로그인: 진입");
 
-    //    UsernamePasswordAuthenticationToken authRequest;
-    //
-    //    try {
-    //      authRequest = getAuthRequest(request);
-    //      setDetails(request, authRequest);
-    //    } catch (Exception e) {
-    //      throw new ProfileApplicationException(ErrorCode.BUSINESS_EXCEPTION_ERROR);
-    //    }
-    //
-    //    // Authentication 객체를 반환한다.
-    //    return this.getAuthenticationManager().authenticate(authRequest);
-    log.info("JwtAuthenticationFilter 로그인 : 진입");
-    // 로그인 요청 시 들어온 데이터를 객체로 변환
-    ObjectMapper om = new ObjectMapper();
-    UserDto userLoginRequest = null;
+    UsernamePasswordAuthenticationToken authRequest;
+
     try {
-      userLoginRequest = om.readValue(request.getInputStream(), UserDto.class);
+      authRequest = getAuthRequest(request);
+      setDetails(request, authRequest);
     } catch (Exception e) {
-      e.printStackTrace();
+      throw new ProfileApplicationException(ErrorCode.BUSINESS_EXCEPTION_ERROR);
     }
 
-    // 해당 객체로 로그인 시도를 위한 유저네임패스워드 authenticationToken 생성
-    UsernamePasswordAuthenticationToken authenticationToken =
-        new UsernamePasswordAuthenticationToken(
-            userLoginRequest.username(), userLoginRequest.password());
-
-    // authenticate() 함수가 호출 되면 인증 프로바이더가 유저 디테일 서비스의
-    // loadUserByUsername(토큰의 첫번째 파라미터) 를 호출하고
-    // UserDetails를 리턴받아서 토큰의 두번째 파라메터(credential)과
-    // UserDetails(DB값)의 getPassword()함수로 비교해서 동일하면
-    // Authentication 객체를 만들어서 필터체인으로 리턴해준다.
-    Authentication authentication = authenticationManager.authenticate(authenticationToken);
-    // Tip: 인증 프로바이더의 디폴트 서비스는 UserDetailsService 타입
-    // Tip: 인증 프로바이더의 디폴트 암호화 방식은 BCryptPasswordEncoder
-    // 결론은 인증 프로바이더에게 알려줄 필요가 없음.
-
-    // 위 영역이 성공했다면, session영역에 authenticaion 객체가 저장된다->로그인이 성공
-    return authentication;
+    // Authentication 객체를 반환한다.
+    return this.getAuthenticationManager().authenticate(authRequest);
   }
 
   /**
@@ -97,7 +71,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
       UserDto user = objectMapper.readValue(request.getInputStream(), UserDto.class);
       log.debug(
           "1.CustomAuthenticationFilter :: loginId: "
-              + user.loginId()
+              + user.username()
               + "userPw: "
               + user.password());
 
@@ -105,7 +79,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
        * ID, PW를 기반으로 UsernamePasswordAuthenticationToken 토큰을 발급한다.
        * UsernamePasswordAuthenticationToken 객체가 처음 생성될 때 authenticated 필드는 기본적으로 false로 설정된다.
        */
-      return new UsernamePasswordAuthenticationToken(user.loginId(), user.password());
+      return new UsernamePasswordAuthenticationToken(user.email(), user.password());
     } catch (UsernameNotFoundException e) {
       throw new UsernameNotFoundException(e.getMessage());
     } catch (Exception e) {
