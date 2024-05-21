@@ -1,19 +1,33 @@
 package com.thresh.playground.domain.user.controller;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
+import com.thresh.playground.domain.user.dto.UserLoginRequest;
+import com.thresh.playground.domain.user.dto.UserSignupRequest;
+import com.thresh.playground.domain.user.service.UserManageService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/api/auth")
 public class LoginController {
+  private final UserManageService userManageService;
+
+  @PostMapping("/signup")
+  public ResponseEntity signup(@Valid @RequestBody UserSignupRequest userSignupRequest) {
+    userManageService.signup(userSignupRequest);
+    return new ResponseEntity(HttpStatus.CREATED);
+  }
+
+  @GetMapping("/check")
+  public ResponseEntity check() {
+    return new ResponseEntity(HttpStatus.OK);
+  }
 
   //  /** [View] 로그인 페이지를 엽니다. */
   //  @GetMapping("/login")

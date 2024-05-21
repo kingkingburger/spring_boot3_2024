@@ -1,15 +1,17 @@
 package com.thresh.playground.global.security.config;
 
+import com.thresh.playground.domain.user.repository.UserRepository;
 import com.thresh.playground.global.security.filter.CustomAuthenticationFilter;
+import com.thresh.playground.global.security.filter.JwtAuthenticationFilter;
 import com.thresh.playground.global.security.filter.JwtAuthorizationFilter;
 import com.thresh.playground.global.security.handler.CustomAuthFailureHandler;
 import com.thresh.playground.global.security.handler.CustomAuthSuccessHandler;
 import com.thresh.playground.global.security.handler.CustomAuthenticationProvider;
-import com.thresh.playground.global.security.service.CustomUserDetailsService;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.function.Supplier;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,9 +25,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -33,6 +36,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Slf4j
 @Configuration
 public class SecurityConfig {
+  @Autowired private UserRepository userRepository;
+
   /**
    * 이 메서드는 정적 자원에 대해 보안을 적용하지 않도록 설정한다. 정적 자원은 보통 HTML, CSS, JavaScript, 이미지 파일 등을 의미하며, 이들에 대해 보안을
    * 적용하지 않음으로써 성능을 향상시킬 수 있다.
@@ -58,6 +63,29 @@ public class SecurityConfig {
     return source;
   }
 
+  @Bean // Ioc 컨테이너에 BCryptPasswordEncoder() 객체가 등록됨.
+  public BCryptPasswordEncoder passwordEncoder() {
+    log.debug("디버그 : BCryptPasswordEncoder 빈 등록됨");
+    return new BCryptPasswordEncoder();
+  }
+
+  // JWT 필터 등록이 필요함
+  public class CustomSecurityFilterManager
+      extends AbstractHttpConfigurer<CustomSecurityFilterManager, HttpSecurity> {
+    @Override
+    public void configure(HttpSecurity builder) throws Exception {
+      AuthenticationManager authenticationManager =
+          builder.getSharedObject(AuthenticationManager.class);
+      builder.addFilter(new JwtAuthenticationFilter(authenticationManager));
+      //      builder.addFilter(new JwtAuthorizationFilter(authenticationManager));
+      super.configure(builder);
+    }
+
+    public HttpSecurity build() {
+      return getBuilder();
+    }
+  }
+
   /**
    * Spring Security 설정을 정의하는 메서드.
    *
@@ -79,43 +107,33 @@ public class SecurityConfig {
    * @throws Exception 설정 중 발생할 수 있는 예외
    */
   @Bean
-  public SecurityFilterChain filterChain(
-      HttpSecurity http,
-      //      CustomAuthenticationFilter customAuthenticationFilter,
-      JwtAuthorizationFilter jwtAuthorizationFilter)
-      throws Exception {
+  public SecurityFilterChain filterChain(HttpSecurity http
+      //          , CustomAuthenticationFilter customAuthenticationFilter
+      //            JwtAuthorizationFilter jwtAuthorizationFilter
+      ) throws Exception {
     log.debug("[+] WebSecurityConfig Start !!! ");
+
     return http.csrf(AbstractHttpConfigurer::disable)
         .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-        //        .authorizeHttpRequests(
-        //            authorize ->
-        //                authorize
-        //                    .requestMatchers("/resources/**", "/static/**")
-        //                    .permitAll()
-        //                    .requestMatchers("/css/**")
-        //                    .permitAll()
-        //                    .requestMatchers("/main/rootPage")
-        //                    .permitAll()
-        //                    .requestMatchers("/error.html")
-        //                    .permitAll()
-        //                    .anyRequest()
-        //                    .authenticated())
-        .addFilterBefore(jwtAuthorizationFilter, BasicAuthenticationFilter.class)
+        .authorizeHttpRequests(
+            authorize ->
+                authorize.requestMatchers("/api/auth/**").authenticated().anyRequest().permitAll())
         .sessionManagement(
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .formLogin(AbstractHttpConfigurer::disable)
         .httpBasic(AbstractHttpConfigurer::disable)
-        //        .formLogin(
-        //            login ->
-        //                login
-        //                    .loginPage("/login")
-        //                    .successHandler(new
-        // SimpleUrlAuthenticationSuccessHandler("/main/rootPage"))
-        //                    .permitAll())
-        //        .addFilterBefore(customAuthenticationFilter,
-        // UsernamePasswordAuthenticationFilter.class)
         .build();
   }
+
+  //  public class MyCustomDsl extends AbstractHttpConfigurer<MyCustomDsl, HttpSecurity> {
+  //    @Override
+  //    public void configure(HttpSecurity http) throws Exception {
+  //      AuthenticationManager authenticationManager =
+  //          http.getSharedObject(AuthenticationManager.class);
+  //      http.addFilter(new JwtAuthenticationFilter(authenticationManager))
+  //          .addFilter(new JwtAuthorizationFilter(authenticationManager, userRepository));
+  //    }
+  //  }
 
   /**
    * 1. 커스텀을 수행한 '인증' 필터로 접근 URL, 데이터 전달방식(form) 등 인증 과정 및 인증 후 처리에 대한 설정을 구성하는 메서드다. 이 메서드는 사용자 정의
@@ -131,7 +149,8 @@ public class SecurityConfig {
   //    CustomAuthenticationFilter customAuthenticationFilter =
   //        new CustomAuthenticationFilter(authenticationManager);
   //    // "/user/login" 엔드포인트로 들어오는 요청을 CustomAuthenticationFilter에서 처리하도록 지정한다.
-  //    customAuthenticationFilter.setFilterProcessesUrl("/user/login");
+  //    //    customAuthenticationFilter.setFilterProcessesUrl("/user/login");
+  //    customAuthenticationFilter.setFilterProcessesUrl("/api/auth/signup");
   //    customAuthenticationFilter.setAuthenticationSuccessHandler(
   //        customAuthSuccessHandler); // '인증' 성공 시 해당 핸들러로 처리를 전가한다.
   //    customAuthenticationFilter.setAuthenticationFailureHandler(
@@ -184,11 +203,11 @@ public class SecurityConfig {
    * "JWT 토큰을 통하여서 사용자를 인증한다." -> 이 메서드는 JWT 인증 필터를 생성한다. JWT 인증 필터는 요청 헤더의 JWT 토큰을 검증하고, 토큰이 유효하면
    * 토큰에서 사용자의 정보와 권한을 추출하여 SecurityContext에 저장한다.
    */
-  @Bean
-  public JwtAuthorizationFilter jwtAuthorizationFilter(
-      CustomUserDetailsService userDetailsService) {
-    return new JwtAuthorizationFilter(userDetailsService);
-  }
+  //  @Bean
+  //  public JwtAuthorizationFilter jwtAuthorizationFilter(
+  //      CustomUserDetailsService userDetailsService) {
+  //    return new JwtAuthorizationFilter(userDetailsService);
+  //  }
 
   /**
    * isAdmin 메소드는 Supplier<Authentication>와 RequestAuthorizationContext를 인자로 받아서 "ADMIN" 역할을 가진
