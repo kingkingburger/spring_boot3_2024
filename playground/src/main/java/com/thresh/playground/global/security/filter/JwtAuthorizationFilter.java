@@ -1,7 +1,10 @@
 package com.thresh.playground.global.security.filter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.thresh.playground.global.exception.ErrorCode;
 import com.thresh.playground.global.exception.ProfileApplicationException;
+import com.thresh.playground.global.security.jwt.TokenUtils;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
@@ -12,7 +15,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONObject;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,6 +27,7 @@ import java.security.SignatureException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /** 지정한 URL별 JWT의 유효성 검증을 수행하며 직접적인 사용자 인증을 확인합니다. */
 @Slf4j
@@ -32,6 +35,7 @@ import java.util.List;
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
   private final UserDetailsService userDetailsService;
+  private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
   @Override
   protected void doFilterInternal(
@@ -107,27 +111,28 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
       }
     } catch (Exception e) {
       // 로그 메시지 생성
-      String logMessage = jsonResponseWrapper(e).getString("message");
-      log.error(logMessage, e); // 로그에만 해당 메시지를 출력합니다.
+      log.error(e.getMessage(), e);
 
       // 클라이언트에게 전송할 고정된 메시지
       response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
       response.setCharacterEncoding("UTF-8");
       response.setContentType("application/json");
 
-      PrintWriter printWriter = response.getWriter();
-      JSONObject jsonObject = new JSONObject();
-      jsonObject.put("error", true);
-      jsonObject.put("message", "로그인 에러");
+      Map<String, Object> errorResponse = new HashMap<>();
+      errorResponse.put("error", true);
+      errorResponse.put("message", "로그인 에러");
+      errorResponse.put("details", jsonResponseWrapper(e));
 
-      printWriter.print(jsonObject);
+      PrintWriter printWriter = response.getWriter();
+      String jsonResponse = objectMapper.writeValueAsString(errorResponse);
+      printWriter.print(jsonResponse);
       printWriter.flush();
       printWriter.close();
     }
   }
 
   /** 토큰 관련 Exception 발생 시 예외 응답값 구성 */
-  private JSONObject jsonResponseWrapper(Exception e) {
+  private Map<String, Object> jsonResponseWrapper(Exception e) {
 
     String resultMessage = "";
     // JWT 토큰 만료
@@ -147,13 +152,12 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
       resultMessage = "OTHER TOKEN ERROR";
     }
 
-    HashMap<String, Object> jsonMap = new HashMap<>();
+    Map<String, Object> jsonMap = new HashMap<>();
     jsonMap.put("status", 401);
     jsonMap.put("code", "9999");
     jsonMap.put("message", resultMessage);
     jsonMap.put("reason", e.getMessage());
-    JSONObject jsonObject = new JSONObject(jsonMap);
     log.error(resultMessage, e);
-    return jsonObject;
+    return jsonMap;
   }
 }

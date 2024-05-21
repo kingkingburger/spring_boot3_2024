@@ -1,6 +1,6 @@
 package com.thresh.playground.global.security.handler;
 
-import com.jinan.profile.dto.security.SecurityUserDetailsDto;
+import com.thresh.playground.global.security.model.SecurityUserDetailsDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationProvider;
