@@ -10,13 +10,16 @@ import com.thresh.playground.global.exception.ProfileApplicationException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class UserManageService {
+public class UserManageService implements UserDetailsService {
 
   private final UserRepository userRepository;
 
@@ -33,8 +36,18 @@ public class UserManageService {
             .password(passwordEncoder.encode(request.password()))
             .email(request.email())
             .roleType(RoleType.USER)
+            .role(request.role())
             .userStatus(UserStatus.D)
             .build();
     userRepository.save(users);
+  }
+
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    User entity =
+        userRepository
+            .findByUsername(username)
+            .orElseThrow(() -> new ProfileApplicationException(ErrorCode.USER_NOT_FOUND));
+    return entity;
   }
 }

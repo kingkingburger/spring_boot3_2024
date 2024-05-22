@@ -10,6 +10,7 @@ public record UserSignupRequest(
     String username,
     String password,
     String email,
+    String role,
     LocalDateTime createdAt,
     LocalDateTime updatedAt) {
 
@@ -18,19 +19,10 @@ public record UserSignupRequest(
       String username,
       String password,
       String email,
+      String role,
       LocalDateTime createdAt,
       LocalDateTime updatedAt) {
-    return new UserSignupRequest(username, password, email, createdAt, updatedAt);
-  }
-
-  // security에서 사용할 팩토리 메서드
-  public static UserSignupRequest of() {
-    return new UserSignupRequest(null, null, null, null, null);
-  }
-
-  // Principal에서 사용할 factory method of 선언
-  public static UserSignupRequest of(String username, String password, String email) {
-    return new UserSignupRequest(username, password, email, null, null);
+    return new UserSignupRequest(username, password, email, role, createdAt, updatedAt);
   }
 
   // 서비스 레이어에서 entity를 dto로 변환시켜주는 코드
@@ -39,6 +31,7 @@ public record UserSignupRequest(
         entity.getUsername(),
         entity.getPassword(),
         entity.getEmail(),
+        entity.getRole(),
         entity.getCreatedDate(),
         entity.getUpdatedDate());
   }
