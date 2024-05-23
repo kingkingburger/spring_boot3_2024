@@ -1,5 +1,6 @@
 package com.thresh.playground.global.security2;
 
+import com.thresh.playground.global.security3.WebProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.context.DelegatingSecurityContextRepository;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -26,6 +31,7 @@ public class SecurityConfig2 {
   private final CustomLoginAuthenticationEntryPoint authenticationEntryPoint;
   private final AuthenticationConfiguration authenticationConfiguration;
   private final CustomAccessDeniedHandler accessDeniedHandler;
+  private final WebProperties webProperties;
 
   @Bean
   public PasswordEncoder passwordEncoder() {
@@ -38,14 +44,18 @@ public class SecurityConfig2 {
     http.csrf(AbstractHttpConfigurer::disable)
         .cors(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(
-            request ->
-                request
-                    .requestMatchers("/api/auth/signup") // /api/auth/signup 경로는 인증 없이 접근 가능
-                    .permitAll()
-                    .requestMatchers("/api/**") // 그 외 /api/** 경로는 인증 필요
-                    .authenticated()
-                    .anyRequest() // 나머지 모든 요청은 인증 없이 접근 가능
-                    .permitAll())
+            requestsManagement -> {
+              RequestMatcher[] whitelistedMatchers =
+                  Arrays.stream(webProperties.urlWhitelists())
+                      .map(AntPathRequestMatcher::new)
+                      .toArray(AntPathRequestMatcher[]::new);
+
+              requestsManagement
+                  .requestMatchers(whitelistedMatchers)
+                  .permitAll()
+                  .anyRequest()
+                  .authenticated();
+            })
         .addFilterBefore(ajaxAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
         .exceptionHandling(
             config ->

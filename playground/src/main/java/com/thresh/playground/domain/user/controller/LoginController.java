@@ -28,26 +28,14 @@ public class LoginController {
   //    return new ResponseEntity(HttpStatus.CREATED);
   //  }
   @PostMapping("/signup")
-  public AuthResultResponse signup(
-      Authentication authentication, @Valid @RequestBody UserSignupRequest userSignupRequest) {
+  public AuthResultResponse signup(@Valid @RequestBody UserSignupRequest userSignupRequest) {
 
-    // 사용자 회원가입
-    if (authentication.getCredentials() instanceof Token token
-        && token.tokenType() == TokenType.TEMPORARY) {
-      Optional<User> existUser = userManageService.findByUsername(userSignupRequest.username());
+    //    Optional<User> existUser = userManageService.findByUsername(userSignupRequest.username());
 
-      if (existUser.isPresent()) {
-        throw new RuntimeException();
-      }
+    User user = userManageService.signup(userSignupRequest);
+    TokenPair tokenPair = tokenGenerator.generateTokenPair(user.getEmail());
 
-      //      UserSignupRequest userDto = UserSignupRequest.fromEntity(user);
-      User user = userManageService.signup(userSignupRequest);
-      TokenPair tokenPair = tokenGenerator.generateTokenPair(user.getEmail());
-      return AuthResultResponse.of(tokenPair, false);
-    }
-
-    throw new RuntimeException();
-    //    return new ResponseEntity(HttpStatus.CREATED);
+    return AuthResultResponse.of(tokenPair, false);
   }
 
   @GetMapping("/check")
