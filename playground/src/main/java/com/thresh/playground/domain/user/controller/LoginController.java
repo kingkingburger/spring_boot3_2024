@@ -1,13 +1,18 @@
 package com.thresh.playground.domain.user.controller;
 
 import com.thresh.playground.domain.user.dto.UserSignupRequest;
+import com.thresh.playground.domain.user.entity.User;
 import com.thresh.playground.domain.user.service.UserManageService;
+import com.thresh.playground.global.security3.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -15,11 +20,34 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 public class LoginController {
   private final UserManageService userManageService;
+  private final TokenGenerator tokenGenerator;
 
+  //  @PostMapping("/signup")
+  //  public ResponseEntity signup(@Valid @RequestBody UserSignupRequest userSignupRequest) {
+  //    userManageService.signup(userSignupRequest);
+  //    return new ResponseEntity(HttpStatus.CREATED);
+  //  }
   @PostMapping("/signup")
-  public ResponseEntity signup(@Valid @RequestBody UserSignupRequest userSignupRequest) {
-    userManageService.signup(userSignupRequest);
-    return new ResponseEntity(HttpStatus.CREATED);
+  public AuthResultResponse signup(
+      Authentication authentication, @Valid @RequestBody UserSignupRequest userSignupRequest) {
+
+    // 사용자 회원가입
+    if (authentication.getCredentials() instanceof Token token
+        && token.tokenType() == TokenType.TEMPORARY) {
+      Optional<User> existUser = userManageService.findByUsername(userSignupRequest.username());
+
+      if (existUser.isPresent()) {
+        throw new RuntimeException();
+      }
+
+      //      UserSignupRequest userDto = UserSignupRequest.fromEntity(user);
+      User user = userManageService.signup(userSignupRequest);
+      TokenPair tokenPair = tokenGenerator.generateTokenPair(user.getEmail());
+      return AuthResultResponse.of(tokenPair, false);
+    }
+
+    throw new RuntimeException();
+    //    return new ResponseEntity(HttpStatus.CREATED);
   }
 
   @GetMapping("/check")

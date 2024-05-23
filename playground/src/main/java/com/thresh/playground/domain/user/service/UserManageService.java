@@ -16,6 +16,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -26,7 +28,7 @@ public class UserManageService implements UserDetailsService {
   private final PasswordEncoder passwordEncoder;
 
   @Transactional
-  public void signup(UserSignupRequest request) {
+  public User signup(UserSignupRequest request) {
     if (userRepository.findByUsername(request.username()).isPresent()) {
       throw new ProfileApplicationException(ErrorCode.DUPLICATED_USER_NAME);
     }
@@ -40,6 +42,7 @@ public class UserManageService implements UserDetailsService {
             .userStatus(UserStatus.D)
             .build();
     userRepository.save(users);
+    return users;
   }
 
   @Override
@@ -49,5 +52,9 @@ public class UserManageService implements UserDetailsService {
             .findByUsername(username)
             .orElseThrow(() -> new ProfileApplicationException(ErrorCode.USER_NOT_FOUND));
     return entity;
+  }
+
+  public Optional<User> findByUsername(String username) {
+    return userRepository.findByUsername(username);
   }
 }
