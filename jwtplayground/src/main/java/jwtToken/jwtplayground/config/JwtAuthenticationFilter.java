@@ -9,6 +9,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -19,6 +22,7 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter { // http 요청당 1번의 필터링이 적용되요
 
     private final JwtService jwtService;
+    private final UserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(
@@ -40,6 +44,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter { // http 요�
 
         userEmail = jwtService.extractUsername(jwt);
 
+        // SecurityContextHolder를 사용함으로서 다음 필터링에 들어가지 않아요
+        // Authentication이 null이라면 아직 인증 받지 못한 user라는 뜻이에요
+        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            // db에서 user 정보를 가지고 와요
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+        }
 
     }
 }
