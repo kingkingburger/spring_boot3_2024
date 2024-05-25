@@ -9,9 +9,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -49,7 +52,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter { // http 요�
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             // db에서 user 정보를 가지고 와요
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-        }
+            if (jwtService.isTokenValid(jwt, userDetails)) {
+                // 유저 정보(id, pw)를 검증하기 위한 객체
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                        userDetails,
+                        null,
+                        userDetails.getAuthorities()
+                );
 
+                authToken.setDetails(
+                        new WebAuthenticationDetailsSource().buildDetails(request)
+                );
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            }
+        }
+        // 다음에 실행할 필터를 호출해요
+        filterChain.doFilter(request, response);
     }
 }
