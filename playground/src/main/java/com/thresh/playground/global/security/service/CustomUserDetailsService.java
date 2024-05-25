@@ -1,21 +1,5 @@
 package com.thresh.playground.global.security.service;
 
-import com.thresh.playground.domain.user.dto.UserDto;
-import com.thresh.playground.domain.user.entity.User;
-import com.thresh.playground.domain.user.repository.UserRepository;
-import com.thresh.playground.global.exception.ErrorCode;
-import com.thresh.playground.global.exception.ProfileApplicationException;
-import com.thresh.playground.global.security.model.SecurityUserDetailsDto;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
-
-import java.util.Collections;
-
 /**
  * 3-1. 시큐리티의 UserDetailsService를 구현한 메서드 사용자 정보를 통해 구분해서 로그인했는지 안했는지 판단한다. 이 메서드는 사용자 정보를 로드하는 서비스를
  * 생성한다. 사용자 이름을 기반으로 사용자 정보를 데이터베이스에서 조회하고, 조회된 사용자 정보를 사용하여 SecurityUserDetailsDto 객체를 생성한다.

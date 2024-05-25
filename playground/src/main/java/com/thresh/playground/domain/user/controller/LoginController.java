@@ -1,7 +1,7 @@
 package com.thresh.playground.domain.user.controller;
 
 import com.thresh.playground.domain.user.dto.UserSignupRequest;
-import com.thresh.playground.domain.user.entity.User;
+import com.thresh.playground.domain.user.entity.User2;
 import com.thresh.playground.domain.user.service.UserManageService;
 import com.thresh.playground.global.security3.*;
 import jakarta.validation.Valid;
@@ -9,10 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -32,8 +29,8 @@ public class LoginController {
 
     //    Optional<User> existUser = userManageService.findByUsername(userSignupRequest.username());
 
-    User user = userManageService.signup(userSignupRequest);
-    TokenPair tokenPair = tokenGenerator.generateTokenPair(user.getEmail());
+    User2 user2 = userManageService.signup(userSignupRequest);
+    TokenPair tokenPair = tokenGenerator.generateTokenPair(user2.getEmail());
 
     return AuthResultResponse.of(tokenPair, false);
   }

@@ -1,7 +1,7 @@
 package com.thresh.playground.global.security2;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.thresh.playground.domain.user.entity.User;
+import com.thresh.playground.domain.user.entity.User2;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -29,10 +29,10 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
       HttpServletRequest request, HttpServletResponse response, Authentication authentication)
       throws IOException {
 
-    User user = (User) authentication.getPrincipal();
+    User2 user2 = (User2) authentication.getPrincipal();
 
     // User 객체를 JSON 문자열로 변환
-    String jsonResponse = objectMapper.writeValueAsString(user);
+    String jsonResponse = objectMapper.writeValueAsString(user2);
 
     // 응답 설정
     response.setStatus(HttpStatus.OK.value());

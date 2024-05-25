@@ -1,6 +1,6 @@
 package com.thresh.playground.global.security2;
 
-import com.thresh.playground.domain.user.entity.User;
+import com.thresh.playground.domain.user.entity.User2;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -23,7 +23,7 @@ public class CustomAuthenticationProvider2 implements AuthenticationProvider {
     String loginId = authentication.getName();
     String password = (String) authentication.getCredentials();
 
-    User entity = (User) userDetailsService.loadUserByUsername(loginId);
+    User2 entity = (User2) userDetailsService.loadUserByUsername(loginId);
 
     if (!passwordEncoder.matches(password, entity.getPassword())) {
       throw new BadCredentialsException("Invalid Password");

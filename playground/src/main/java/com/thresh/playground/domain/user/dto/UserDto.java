@@ -1,12 +1,12 @@
 package com.thresh.playground.domain.user.dto;
 
-import com.thresh.playground.domain.user.entity.User;
+import com.thresh.playground.domain.user.entity.User2;
 import com.thresh.playground.domain.user.entity.constant.RoleType;
 import com.thresh.playground.domain.user.entity.constant.UserStatus;
 
 import java.time.LocalDateTime;
 
-/** DTO for {@link User} */
+/** DTO for {@link User2} */
 public record UserDto(
     Long userId,
     //    String loginId,
@@ -77,7 +77,7 @@ public record UserDto(
   }
 
   // 서비스 레이어에서 entity를 dto로 변환시켜주는 코드
-  public static UserDto fromEntity(User entity) {
+  public static UserDto fromEntity(User2 entity) {
     return UserDto.of(
         entity.getId(),
         //        entity.getLoginId(),

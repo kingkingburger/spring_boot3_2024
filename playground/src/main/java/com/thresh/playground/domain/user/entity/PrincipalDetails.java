@@ -8,24 +8,24 @@ import java.util.Collection;
 
 public class PrincipalDetails implements UserDetails {
 
-  private User user;
+  private User2 user2;
 
-  public PrincipalDetails(User user) {
-    this.user = user;
+  public PrincipalDetails(User2 user2) {
+    this.user2 = user2;
   }
 
-  public User getUser() {
-    return user;
+  public User2 getUser() {
+    return user2;
   }
 
   @Override
   public String getPassword() {
-    return user.getPassword();
+    return user2.getPassword();
   }
 
   @Override
   public String getUsername() {
-    return user.getUsername();
+    return user2.getUsername();
   }
 
   @Override

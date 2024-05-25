@@ -1,7 +1,7 @@
 package com.thresh.playground.domain.user.service;
 
 import com.thresh.playground.domain.user.dto.UserSignupRequest;
-import com.thresh.playground.domain.user.entity.User;
+import com.thresh.playground.domain.user.entity.User2;
 import com.thresh.playground.domain.user.entity.constant.RoleType;
 import com.thresh.playground.domain.user.entity.constant.UserStatus;
 import com.thresh.playground.domain.user.repository.UserRepository;
@@ -28,12 +28,12 @@ public class UserManageService implements UserDetailsService {
   private final PasswordEncoder passwordEncoder;
 
   @Transactional
-  public User signup(UserSignupRequest request) {
+  public User2 signup(UserSignupRequest request) {
     if (userRepository.findByUsername(request.username()).isPresent()) {
       throw new ProfileApplicationException(ErrorCode.DUPLICATED_USER_NAME);
     }
-    User users =
-        User.builder()
+    User2 users =
+        User2.builder()
             .username(request.username())
             .password(passwordEncoder.encode(request.password()))
             .email(request.email())
@@ -47,14 +47,14 @@ public class UserManageService implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    User entity =
+    User2 entity =
         userRepository
             .findByUsername(username)
             .orElseThrow(() -> new ProfileApplicationException(ErrorCode.USER_NOT_FOUND));
     return entity;
   }
 
-  public Optional<User> findByUsername(String username) {
+  public Optional<User2> findByUsername(String username) {
     return userRepository.findByUsername(username);
   }
 }

@@ -1,9 +1,10 @@
 package com.thresh.playground.domain.user.dto;
 
-import com.thresh.playground.domain.user.entity.User;
+import com.thresh.playground.domain.user.entity.User2;
+
 import java.time.LocalDateTime;
 
-/** DTO for {@link User} */
+/** DTO for {@link User2} */
 public record UserLoginRequest(
     String username,
     String password,
@@ -32,7 +33,7 @@ public record UserLoginRequest(
   }
 
   // 서비스 레이어에서 entity를 dto로 변환시켜주는 코드
-  public static UserLoginRequest fromEntity(User entity) {
+  public static UserLoginRequest fromEntity(User2 entity) {
     return UserLoginRequest.of(
         entity.getUsername(),
         entity.getPassword(),
