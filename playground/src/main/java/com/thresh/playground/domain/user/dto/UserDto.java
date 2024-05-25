@@ -1,6 +1,5 @@
 package com.thresh.playground.domain.user.dto;
 
-import com.thresh.playground.domain.user.entity.User2;
 import com.thresh.playground.domain.user.entity.constant.RoleType;
 import com.thresh.playground.domain.user.entity.constant.UserStatus;
 

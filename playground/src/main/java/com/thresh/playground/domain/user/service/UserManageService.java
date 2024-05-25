@@ -1,7 +1,6 @@
 package com.thresh.playground.domain.user.service;
 
 import com.thresh.playground.domain.user.dto.UserSignupRequest;
-import com.thresh.playground.domain.user.entity.User2;
 import com.thresh.playground.domain.user.entity.constant.RoleType;
 import com.thresh.playground.domain.user.entity.constant.UserStatus;
 import com.thresh.playground.domain.user.repository.UserRepository;

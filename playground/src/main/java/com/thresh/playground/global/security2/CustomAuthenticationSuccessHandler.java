@@ -1,7 +1,6 @@
 package com.thresh.playground.global.security2;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.thresh.playground.domain.user.entity.User2;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;

@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.Date;
 
 import com.thresh.playground.domain.user.dto.UserLoginRequest;
-import com.thresh.playground.domain.user.entity.PrincipalDetails;
 import com.thresh.playground.domain.user.entity.constant.JwtProperties;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

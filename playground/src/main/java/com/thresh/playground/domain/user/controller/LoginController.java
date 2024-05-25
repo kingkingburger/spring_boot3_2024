@@ -1,7 +1,6 @@
 package com.thresh.playground.domain.user.controller;
 
 import com.thresh.playground.domain.user.dto.UserSignupRequest;
-import com.thresh.playground.domain.user.entity.User2;
 import com.thresh.playground.domain.user.service.UserManageService;
 import com.thresh.playground.global.security3.*;
 import jakarta.validation.Valid;

@@ -1,6 +1,5 @@
 package com.thresh.playground.global.security2;
 
-import com.thresh.playground.domain.user.entity.User2;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
