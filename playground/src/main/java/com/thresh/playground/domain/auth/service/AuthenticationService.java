@@ -9,7 +9,9 @@ import com.thresh.playground.domain.user.repository.UserRepository;
 import com.thresh.playground.global.config.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +24,8 @@ public class AuthenticationService {
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
 
-  public AuthenticationResponse register(RegisterRequest request) {
-    // TODO: var 타입은 뭐지?
+  public String register(RegisterRequest request) {
+    // var 타입은 뭐지? => java에서 쓰는 any 같은 용도
     var user =
         User.builder()
             .name(request.getName())
@@ -35,18 +37,21 @@ public class AuthenticationService {
 
     var jwtToken = jwtService.generateToken(user);
 
-    return AuthenticationResponse.builder().token(jwtToken).build();
+    //    return AuthenticationResponse.builder().token(jwtToken).build();
+    return jwtToken;
   }
 
   // 사용자의 인증을 해주는 메서드
   public AuthenticationResponse authentication(AuthenticationRequest request) {
-    authenticationManager.authenticate(
-        new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+    Authentication authenticate =
+        authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
-    var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
-
-    var jwtToken = jwtService.generateToken(user);
-
-    return AuthenticationResponse.builder().token(jwtToken).build();
+    if (authenticate.isAuthenticated()) {
+      var user = (User) authenticate.getPrincipal();
+      var jwtToken = jwtService.generateToken(user);
+      return AuthenticationResponse.builder().token(jwtToken).build();
+    }
+    return null;
   }
 }

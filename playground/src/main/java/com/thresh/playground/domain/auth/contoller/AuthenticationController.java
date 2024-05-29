@@ -4,6 +4,9 @@ import com.thresh.playground.domain.auth.dto.AuthenticationRequest;
 import com.thresh.playground.domain.auth.dto.AuthenticationResponse;
 import com.thresh.playground.domain.auth.dto.RegisterRequest;
 import com.thresh.playground.domain.auth.service.AuthenticationService;
+import com.thresh.playground.domain.user.repository.UserRepository;
+import com.thresh.playground.global.exception.ErrorCode;
+import com.thresh.playground.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,15 +20,27 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationController {
 
   private final AuthenticationService authenticationService;
+  private final UserRepository userRepository;
 
   @PostMapping("/register")
-  public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
-    return ResponseEntity.ok(authenticationService.register(request));
+  public ApiResponse register(@RequestBody RegisterRequest request) {
+    if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+      return ApiResponse.failure(ErrorCode.USER_ALREADY_EXIST);
+    }
+
+    String token = authenticationService.register(request);
+
+    return ApiResponse.ok(token);
   }
 
   @PostMapping("/authentication")
-  public ResponseEntity<AuthenticationResponse> authentication(
-      @RequestBody AuthenticationRequest request) {
-    return ResponseEntity.ok(authenticationService.authentication(request));
+  public ApiResponse authentication(@RequestBody AuthenticationRequest request) {
+    AuthenticationResponse authentication = authenticationService.authentication(request);
+
+    if (authentication.getToken() == null) {
+      return ApiResponse.failure(ErrorCode.INVALID_TOKEN);
+    }
+
+    return ApiResponse.ok(authentication.getToken());
   }
 }

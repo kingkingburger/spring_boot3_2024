@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,15 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
+
+  @Value("${application.security.jwt.secret-key}")
+  private String secretKey;
+
+  @Value("${application.security.jwt.expiration}")
+  private long jwtExpiration;
+
+  @Value("${application.security.jwt.refresh-token.expiration}")
+  private long refreshExpiration;
 
   private static final String SECKET_KEY =
       "7a3da8225db06e6259669441cdee2db7de9e2e8cade3ad55ac683b39fe7ae9f8";
@@ -51,6 +61,17 @@ public class JwtService {
     return extractClaim(token, Claims::getExpiration);
   }
 
+  private String buildToken(
+      Map<String, Object> extraClaims, UserDetails userDetails, long expiration) {
+    return Jwts.builder()
+        .setClaims(extraClaims)
+        .setSubject(userDetails.getUsername())
+        .setIssuedAt(new Date(System.currentTimeMillis()))
+        .setExpiration(new Date(System.currentTimeMillis() + expiration))
+        .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+        .compact();
+  }
+
   // jwt 토큰을 어떻게 생성하는지 세팅하기 위한 메서드
   public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
     return Jwts.builder()
@@ -71,7 +92,7 @@ public class JwtService {
   }
 
   private Key getSignInKey() {
-    byte[] keyBytes = Decoders.BASE64.decode(SECKET_KEY);
+    byte[] keyBytes = Decoders.BASE64.decode(secretKey);
     return Keys.hmacShaKeyFor(keyBytes);
   }
 }

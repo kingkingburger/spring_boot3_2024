@@ -29,6 +29,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter { // http 요�
       @NonNull HttpServletResponse response,
       @NonNull FilterChain filterChain)
       throws ServletException, IOException {
+
+    if (request.getServletPath().contains("/api/v1/auth")) {
+      filterChain.doFilter(request, response);
+      return;
+    }
+
     final String authHeader = request.getHeader("Authorization"); // 헤더에서 토큰을 가져와요
     final String jwt;
     final String userEmail;
