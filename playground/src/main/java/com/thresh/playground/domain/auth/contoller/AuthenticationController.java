@@ -8,7 +8,6 @@ import com.thresh.playground.domain.user.repository.UserRepository;
 import com.thresh.playground.global.exception.ErrorCode;
 import com.thresh.playground.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +32,7 @@ public class AuthenticationController {
     return ApiResponse.ok(token);
   }
 
+  // token refresh 용도
   @PostMapping("/authentication")
   public ApiResponse authentication(@RequestBody AuthenticationRequest request) {
     AuthenticationResponse authentication = authenticationService.authentication(request);
