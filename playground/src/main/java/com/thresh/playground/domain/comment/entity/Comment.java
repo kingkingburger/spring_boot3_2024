@@ -1,4 +1,4 @@
-package com.thresh.playground.domain.entity;
+package com.thresh.playground.domain.comment.entity;
 
 import com.thresh.playground.domain.post.entity.Post;
 import com.thresh.playground.global.entity.BaseTimeEntity;

@@ -1,6 +1,6 @@
 package com.thresh.playground.domain.post.entity;
 
-import com.thresh.playground.domain.entity.Comment;
+import com.thresh.playground.domain.comment.entity.Comment;
 import com.thresh.playground.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Data;
