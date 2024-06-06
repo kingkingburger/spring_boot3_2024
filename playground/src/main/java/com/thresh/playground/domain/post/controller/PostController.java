@@ -16,13 +16,13 @@ public class PostController {
   private final PostService postService;
 
   @PostMapping
-  public Post createPost(@RequestBody Post post) {
-    return postService.savePost(post);
+  public ApiResponse createPost(@RequestBody Post post) {
+    return ApiResponse.ok(postService.savePost(post));
   }
 
   @GetMapping
-  public List<Post> getPosts() {
-    return postService.getAllPost();
+  public ApiResponse<List<Post>> getPosts() {
+    return ApiResponse.ok(postService.getAllPost());
   }
 
   @GetMapping("/id/{id}")
