@@ -10,7 +10,6 @@ import java.util.List;
 
 @Entity
 @Data
-@BatchSize(size = 10)
 public class Comment extends BaseTimeEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,6 +25,7 @@ public class Comment extends BaseTimeEntity {
   @JoinColumn(name = "parent_id")
   private Comment parent;
 
+  @BatchSize(size = 10)
   @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Comment> replies;
 }
