@@ -7,5 +7,5 @@ services:
       - "8090:8090"
     volumes:
       - ./build/libs:/app/libs
-    environment:
-      - SPRING_PROFILES_ACTIVE=default
+    env_file:
+      - .env
