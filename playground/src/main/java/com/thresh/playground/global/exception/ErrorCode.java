@@ -33,6 +33,7 @@ public enum ErrorCode {
   // 로그인 예외처리
   TOKEN_NOT_VALID(404, "3001", "유효하지 않은 토큰입니다."),
   TOKEN_NOT_FOUND(404, "3002", "존재하지 않은 토큰입니다.."),
+  TOKEN_ERROR(403, "3003", "토큰이 없거나 유효하지 않습니다."),
 
   BAD_REQUEST_ERROR(400, "3003", "잘못된 요청입니다."), // 잘못된 서버 요청
   REQUEST_BODY_MISSING_ERROR(400, "3004", "request body의 데이터가 존재하지 않습니다."), // @RequestBody 데이터 미 존재

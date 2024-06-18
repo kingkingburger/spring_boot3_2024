@@ -3,10 +3,10 @@ package com.thresh.playground.global.config;
 import static com.thresh.playground.domain.user.entity.Role.ADMIN;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
+import com.thresh.playground.global.exception.CustomAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -37,6 +37,7 @@ public class SecurityConfiguration {
   };
   private final JwtAuthenticationFilter jwtAuthFilter;
   private final DaoAuthenticationProvider authenticationProvider;
+  private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -52,7 +53,10 @@ public class SecurityConfiguration {
                     .authenticated())
         .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
         .authenticationProvider(authenticationProvider)
-        .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+        .exceptionHandling(
+            exceptionHandling ->
+                exceptionHandling.authenticationEntryPoint(customAuthenticationEntryPoint));
 
     return http.build();
   }
