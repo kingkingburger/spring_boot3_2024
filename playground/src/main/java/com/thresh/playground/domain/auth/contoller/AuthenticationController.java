@@ -37,8 +37,8 @@ public class AuthenticationController {
   public ApiResponse authentication(@RequestBody AuthenticationRequest request) {
     AuthenticationResponse authentication = authenticationService.authentication(request);
 
-    if (authentication.getToken() == null) {
-      return ApiResponse.failure(ErrorCode.INVALID_TOKEN);
+    if (authentication == null || authentication.getToken() == null) {
+      return ApiResponse.failure(ErrorCode.USER_NOT_FOUND);
     }
 
     return ApiResponse.ok(authentication.getToken());

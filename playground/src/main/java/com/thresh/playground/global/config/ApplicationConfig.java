@@ -1,6 +1,7 @@
 package com.thresh.playground.global.config;
 
 import com.thresh.playground.domain.user.repository.UserRepository;
+import com.thresh.playground.global.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,11 +25,12 @@ public class ApplicationConfig {
         userRepository
             .findByEmail(username)
             .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    //    return new CustomUserDetailsService(userRepository);
   }
 
   // 유저정보, 패스워드를 기반으로 인증을 해주는 메서드
   @Bean
-  public AuthenticationProvider authenticationProvider() {
+  public DaoAuthenticationProvider authenticationProvider() {
     DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
     authProvider.setUserDetailsService(userDetailsService());
     authProvider.setPasswordEncoder(passwordEncoder());

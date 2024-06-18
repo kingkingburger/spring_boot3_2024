@@ -7,10 +7,13 @@ import com.thresh.playground.domain.user.entity.Role;
 import com.thresh.playground.domain.user.entity.User;
 import com.thresh.playground.domain.user.repository.UserRepository;
 import com.thresh.playground.global.config.JwtService;
+import com.thresh.playground.global.exception.ErrorCode;
+import com.thresh.playground.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -36,20 +39,28 @@ public class AuthenticationService {
 
     var jwtToken = jwtService.generateToken(user);
 
-    //    return AuthenticationResponse.builder().token(jwtToken).build();
     return jwtToken;
   }
 
   // 사용자의 인증을 해주는 메서드
   public AuthenticationResponse authentication(AuthenticationRequest request) {
-    Authentication authenticate =
-        authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+    try {
+      UsernamePasswordAuthenticationToken authenticationToken =
+          new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());
+      Authentication authenticate = authenticationManager.authenticate(authenticationToken);
 
-    if (authenticate.isAuthenticated()) {
-      var user = (User) authenticate.getPrincipal();
-      var jwtToken = jwtService.generateToken(user);
-      return AuthenticationResponse.builder().token(jwtToken).build();
+      if (!authenticate.isAuthenticated()) {
+        throw new RuntimeException(ErrorCode.USER_NOT_FOUND.getMessage());
+      }
+
+      if (authenticate.isAuthenticated()) {
+        var user = (User) authenticate.getPrincipal();
+        var jwtToken = jwtService.generateToken(user);
+        return AuthenticationResponse.builder().token(jwtToken).build();
+      }
+    } catch (AuthenticationException e) {
+      // 예외 로그 출력 및 처리
+      System.out.println("Authentication failed: " + e.getMessage());
     }
     return null;
   }
