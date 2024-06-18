@@ -35,12 +35,12 @@ public class AuthenticationController {
   // token refresh 용도
   @PostMapping("/authentication")
   public ApiResponse authentication(@RequestBody AuthenticationRequest request) {
-    AuthenticationResponse authentication = authenticationService.authentication(request);
+    String token = authenticationService.authentication(request);
 
-    if (authentication == null || authentication.getToken() == null) {
-      return ApiResponse.failure(ErrorCode.USER_NOT_FOUND);
+    if (token.startsWith("[ERROR]")) {
+      return ApiResponse.failure(ErrorCode.USER_NOT_FOUND, token);
     }
 
-    return ApiResponse.ok(authentication.getToken());
+    return ApiResponse.ok(token);
   }
 }

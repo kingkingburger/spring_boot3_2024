@@ -1,16 +1,16 @@
 package com.thresh.playground.domain.auth.service;
 
 import com.thresh.playground.domain.auth.dto.AuthenticationRequest;
-import com.thresh.playground.domain.auth.dto.AuthenticationResponse;
 import com.thresh.playground.domain.auth.dto.RegisterRequest;
 import com.thresh.playground.domain.user.entity.Role;
 import com.thresh.playground.domain.user.entity.User;
 import com.thresh.playground.domain.user.repository.UserRepository;
 import com.thresh.playground.global.config.JwtService;
-import com.thresh.playground.global.exception.ErrorCode;
-import com.thresh.playground.global.response.ApiResponse;
+import com.thresh.playground.global.exception.Constants;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthenticationService {
 
   private final UserRepository userRepository;
@@ -43,24 +44,26 @@ public class AuthenticationService {
   }
 
   // 사용자의 인증을 해주는 메서드
-  public AuthenticationResponse authentication(AuthenticationRequest request) {
+  public String authentication(AuthenticationRequest request) {
     try {
-      UsernamePasswordAuthenticationToken authenticationToken =
-          new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());
-      Authentication authenticate = authenticationManager.authenticate(authenticationToken);
-
-      if (!authenticate.isAuthenticated()) {
-        throw new RuntimeException(ErrorCode.USER_NOT_FOUND.getMessage());
-      }
+      Authentication authenticate =
+          authenticationManager.authenticate(
+              new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+      log.info("로그인 AuthenticationService: " + authenticate.getPrincipal());
 
       if (authenticate.isAuthenticated()) {
         var user = (User) authenticate.getPrincipal();
-        var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder().token(jwtToken).build();
+        return jwtService.generateToken(user);
       }
+
+    } catch (BadCredentialsException e) {
+      // 잘못된 아이디 또는 비밀번호
+      log.error("Login failed: ", e);
+      return Constants.INVALID_USERNAME_OR_PASSWORD_MESSAGE;
     } catch (AuthenticationException e) {
-      // 예외 로그 출력 및 처리
-      System.out.println("Authentication failed: " + e.getMessage());
+      // 로그인 실패 처리
+      log.error("Login failed: ", e);
+      return Constants.LOGIN_ERROR_MESSAGE;
     }
     return null;
   }
