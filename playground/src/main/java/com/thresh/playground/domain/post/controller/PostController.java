@@ -5,6 +5,7 @@ import com.thresh.playground.domain.post.service.PostService;
 import java.util.List;
 import java.util.UUID;
 
+import com.thresh.playground.global.exception.ErrorCode;
 import com.thresh.playground.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +28,10 @@ public class PostController {
 
   @GetMapping("/id/{id}")
   public ApiResponse getPostById(@PathVariable UUID id) {
-    return ApiResponse.ok(postService.getPostById(id));
+    try {
+      return ApiResponse.ok(postService.getPostById(id));
+    } catch (Exception e) {
+      return ApiResponse.failure(ErrorCode.BAD_REQUEST_ERROR, e.getMessage());
+    }
   }
 }

@@ -1,5 +1,7 @@
 package com.thresh.playground.global.exception;
 
+import java.util.List;
+
 public class Constants {
   // 회원 가입 시 메세지
   public static final String EMAIL_ALREADY_EXISTS = "이미 사용 중인 이메일"; // 52001
@@ -15,4 +17,18 @@ public class Constants {
   public static final String INVALID_USERNAME_OR_PASSWORD_MESSAGE =
       "[ERROR]잘못된 아이디 또는 비밀번호"; // 5600
   public static final String NON_EXISTENT_EMAIL = "[ERROR]존재하지 않는 이메일"; // 5202
+  public static final List<String> WHITE_LIST_URL =
+      List.of(
+          "/api/post/**",
+          "/api/v1/auth/**",
+          "/v2/api-docs",
+          "/v3/api-docs",
+          "/v3/api-docs/**",
+          "/swagger-resources",
+          "/swagger-resources/**",
+          "/configuration/ui",
+          "/configuration/security",
+          "/swagger-ui/**",
+          "/webjars/**",
+          "/swagger-ui.html");
 }
