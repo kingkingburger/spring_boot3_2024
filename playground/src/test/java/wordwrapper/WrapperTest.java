@@ -9,9 +9,14 @@ public class WrapperTest {
 
   @Test
   public void should_wrap() {
-    assertEquals("", wrap(null, 1));
-    assertEquals("", wrap("", 1));
-    assertEquals("x", wrap("x", 1));
+    assertWraps("", null, 1);
+    assertWraps("", "", 1);
+    assertWraps("x", "x", 1);
+    assertWraps("xx", "x\nx", 1);
+  }
+
+  private void assertWraps(String expected, String s, int width) {
+    assertEquals(expected, wrap(s, width));
   }
 
   private String wrap(String text, int length) {
