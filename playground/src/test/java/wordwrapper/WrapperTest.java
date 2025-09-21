@@ -11,6 +11,7 @@ public class WrapperTest {
   public void should_wrap() {
     assertEquals("word\rword", wrap("word word", 4));
     assertEquals("a dog", wrap("a dog", 5));
+    assertEquals("a dog\rwith a\nbone", wrap("a dog with a bone", 5));
   }
 
   private String wrap(String text, int length) {
