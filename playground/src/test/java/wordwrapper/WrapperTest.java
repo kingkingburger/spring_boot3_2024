@@ -15,6 +15,7 @@ public class WrapperTest {
     assertWraps("x\nx", "xx", 1);
     assertWraps("x\nx\nx", "xxx", 1);
     assertWraps("x\nx", "x x", 1);
+    assertWraps("x\nxx", "x xx", 3);
   }
 
   private void assertWraps(String expected, String s, int width) {
@@ -26,7 +27,11 @@ public class WrapperTest {
       return "";
     if(text.length() <= length)
       return text;
-    else
-      return text.substring(0, length) + "\n" + wrap(text.substring(length).trim(), length);
+    else{
+      int breakPoint = text.lastIndexOf(" ", length); // length 까지 마지막으로 space가 발생한 위치 확인
+      if(breakPoint == -1)
+        breakPoint = length;
+      return text.substring(0, breakPoint) + "\n" + wrap(text.substring(breakPoint).trim(), length);
+    }
   }
 }
