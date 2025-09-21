@@ -12,7 +12,7 @@ public class WrapperTest {
     assertWraps("", null, 1);
     assertWraps("", "", 1);
     assertWraps("x", "x", 1);
-    assertWraps("xx", "x\nx", 1);
+    assertWraps("x\nx", "xx", 1);
   }
 
   private void assertWraps(String expected, String s, int width) {
@@ -22,6 +22,9 @@ public class WrapperTest {
   private String wrap(String text, int length) {
     if(text == null)
       return "";
-    return text;
+    if(text.length() <= length)
+      return text;
+    else
+      return text.substring(0, length) + "\n" + text.substring(length);
   }
 }
