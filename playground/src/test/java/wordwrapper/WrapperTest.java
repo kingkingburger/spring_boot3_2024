@@ -11,9 +11,12 @@ public class WrapperTest {
   public void should_wrap() {
     assertEquals("", wrap(null, 1));
     assertEquals("", wrap("", 1));
+    assertEquals("x", wrap("x", 1));
   }
 
   private String wrap(String text, int length) {
-    return "";
+    if(text == null)
+      return "";
+    return text;
   }
 }
