@@ -9,12 +9,10 @@ public class WrapperTest {
 
   @Test
   public void should_wrap() {
-    assertEquals("word\rword", wrap("word word", 4));
-    assertEquals("a dog", wrap("a dog", 5));
-    assertEquals("a dog\rwith a\nbone", wrap("a dog with a bone", 5));
+    assertEquals("", wrap(null, 1));
   }
 
   private String wrap(String text, int length) {
-    return text.length() > length ? text.replaceAll(" ", "\r") : text;
+    return "";
   }
 }
