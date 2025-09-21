@@ -26,6 +26,6 @@ public class WrapperTest {
     if(text.length() <= length)
       return text;
     else
-      return text.substring(0, length) + "\n" + text.substring(length);
+      return text.substring(0, length) + "\n" + wrap(text.substring(length), length);
   }
 }
