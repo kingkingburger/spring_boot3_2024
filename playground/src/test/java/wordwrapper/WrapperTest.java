@@ -15,7 +15,8 @@ public class WrapperTest {
     assertWraps("x\nx", "xx", 1);
     assertWraps("x\nx\nx", "xxx", 1);
     assertWraps("x\nx", "x x", 1);
-    assertWraps("x\nxx", "x xx", 3);
+    assertWraps("four\nscore\nand\nseven\nyears\nago our\nfathers\nbrought\nforth\nupon\nthis\ncontine\nnt",
+        "four score and seven years ago our fathers brought forth upon this continent", 7);
   }
 
   private void assertWraps(String expected, String s, int width) {
